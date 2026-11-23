@@ -44,7 +44,7 @@ nav .sp{flex:1}
 .ph .cam{flex:0 0 42%;background:linear-gradient(160deg,#3B2F5E,#0F1630);position:relative}
 .ph .cam::after{content:"";position:absolute;left:50%;top:22%;width:64px;height:64px;margin-left:-32px;border-radius:50%;background:linear-gradient(180deg,#FFD7B8,#E8A27C);box-shadow:0 46px 0 6px #1E2A55}
 .ph .hk{position:absolute;left:8px;right:8px;top:38%;font:800 12px/1.2 var(--fd);color:#fff;text-align:center;text-shadow:0 2px 0 #000}
-.ph .s img{width:100%;height:100%;object-fit:cover;display:block}
+.ph .s img,.ph .s video{width:100%;height:100%;object-fit:cover;display:block;background:#0F1630}
 .ph .who{position:absolute;left:0;right:0;bottom:-46px;display:flex;align-items:center;justify-content:center;gap:8px;font:700 14px 'Poppins',sans-serif;color:var(--t);transition:opacity .4s}.ph .who i{width:28px;height:28px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font:800 12px var(--fd);font-style:normal}.ph .who small{color:var(--m);font-weight:600}.ph:not([data-slot="0"]) .who{opacity:0}
 .ph .game{flex:1;background:var(--g,linear-gradient(180deg,#1C7CFF,#0B3D91));position:relative}
 .ph .cap{position:absolute;left:0;right:0;bottom:24%;text-align:center;font:900 22px var(--fd);color:#fff;text-shadow:0 3px 0 #000,0 0 12px rgba(0,0,0,.4)}.ph .cap b{color:#FFD43B}
@@ -193,13 +193,15 @@ const EX = [
   ['CHAT LOSES IT OVER THE SUPERCAR', 'THIS <b>RUNS</b>', '#F5A524,#7A4A00', 69]];
 const fan = $('fan'); let phs = [], cur = 0, scores = [];
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const place = () => { phs.forEach((p, i) => { let d = i - cur; if (d > phs.length / 2) d -= phs.length; if (d < -phs.length / 2) d += phs.length; p.dataset.slot = Math.abs(d) <= 2 ? d : 'out'; }); $('sc').textContent = scores[cur] != null ? 'Score ' + scores[cur] : 'Ready'; };
+// clips are silent loops; only the cards on screen play, and none when the user prefers less motion
+const play = (p, on) => { const v = p.querySelector('video'); if (!v) return; if (on && !reduce) { v.muted = true; v.preload = 'auto'; v.play().catch(() => {}); } else v.pause(); };
+const place = () => { phs.forEach((p, i) => { let d = i - cur; if (d > phs.length / 2) d -= phs.length; if (d < -phs.length / 2) d += phs.length; p.dataset.slot = Math.abs(d) <= 2 ? d : 'out'; play(p, p.dataset.slot !== 'out'); }); $('sc').textContent = scores[cur] != null ? 'Score ' + scores[cur] : 'Ready'; };
 async function showcase() {
   let real = [];
   try { real = await fetch('showcase/showcase.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : []); } catch { real = []; }
   if (real.length) {  // finished Shorts made with Vice.ai; repeat a short list so the fan stays full
     const one = real.slice(); while (real.length < 5) real = real.concat(one);  // whole copies: the same streamer never sits next to itself
-    real.slice(0, 12).forEach((x, i) => fan.insertAdjacentHTML('beforeend', `<div class=ph data-i=${i}><div class=s><img alt="${esc(x.hook || 'Example Short')}" src="${esc(x.img)}" loading=lazy></div>${x.who ? `<div class=who><i>${esc(x.who.trim()[0] || 'V').toUpperCase()}</i>${esc(x.who)}${x.score != null ? ` <small>· Score ${esc(x.score)}</small>` : ''}</div>` : ''}</div>`));
+    real.slice(0, 12).forEach((x, i) => fan.insertAdjacentHTML('beforeend', `<div class=ph data-i=${i}><div class=s>${x.video ? `<video muted loop playsinline disablepictureinpicture preload=none poster="${esc(x.img)}" src="${esc(x.video)}" aria-label="${esc(x.hook || 'Example Short')}"></video>` : `<img alt="${esc(x.hook || 'Example Short')}" src="${esc(x.img)}" loading=lazy>`}</div>${x.who ? `<div class=who><i>${esc(x.who.trim()[0] || 'V').toUpperCase()}</i>${esc(x.who)}${x.score != null ? ` <small>· Score ${esc(x.score)}</small>` : ''}</div>` : ''}</div>`));
     scores = real.slice(0, 12).map(x => x.score);
   } else {
     EX.forEach((x, i) => fan.insertAdjacentHTML('beforeend', `<div class=ph data-i=${i}><div class=s><div class=cam></div><div class=hk>${x[0]}</div><div class=game style="--g:linear-gradient(180deg,${x[2]})"><div class=cap>${x[1]}</div></div></div></div>`));
