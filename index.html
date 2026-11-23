@@ -96,6 +96,9 @@ dialog label{display:grid;gap:6px;font-weight:600;font-size:13px;color:var(--m);
 dialog input{font:15px 'Poppins',sans-serif;padding:12px 14px;border:1px solid var(--l);border-radius:12px;background:#F7F9FF;color:var(--t)}
 dialog input:focus{outline:0;border-color:var(--a);box-shadow:0 0 0 4px rgba(47,84,255,.14)}
 dialog .btn{width:100%;min-height:50px}.dx{float:right;background:none;border:0;font-size:22px;color:var(--m);cursor:pointer}
+.pl{display:grid;gap:10px}.pl[hidden],#af[hidden]{display:none}.po{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 12px;text-align:left;padding:14px 16px;border:1px solid var(--l);border-radius:16px;background:#fff;cursor:pointer;font:inherit;color:var(--t);transition:border-color .15s,box-shadow .15s,transform .15s}
+.po:hover{border-color:var(--a);box-shadow:0 8px 22px rgba(47,84,255,.14);transform:translateY(-1px)}.po.best{border:2px solid var(--a)}.po:disabled{opacity:.6;cursor:default}
+.po b{font:800 17px var(--fd);grid-column:1}.po b i{font:600 11px Poppins,sans-serif;font-style:normal;color:#fff;background:var(--grad);border-radius:99px;padding:2px 8px;margin-left:6px;vertical-align:2px}.po span{grid-column:1;font-size:13px;color:var(--m)}.po em{grid-column:2;grid-row:1/3;font:800 22px var(--fd);font-style:normal}.po em small{font:500 12px Poppins,sans-serif;color:var(--m)}.pl .fine{font-size:12px;text-align:center;margin:4px 0 0}
 .dl{display:flex;justify-content:space-between;font-size:13px;margin-top:12px;color:var(--m)}.msg{min-height:20px;font-size:14px;margin-top:10px}.msg.err{color:var(--f)}.msg.ok{color:var(--ok)}
 @media (max-width:860px){nav .links{display:none}.grid4,.steps,.plans{grid-template-columns:1fr}.plan.hot{transform:none}.fan{height:520px}.ph{width:200px;margin-left:-100px}.ph[data-slot="-2"],.ph[data-slot="2"]{opacity:0}.ph[data-slot="-1"]{transform:translateX(-160px) translateY(24px) rotate(-4deg) scale(.86)}.ph[data-slot="1"]{transform:translateX(160px) translateY(24px) rotate(4deg) scale(.86)}.pill.a,.pill.b{left:10px}.pill.c,.pill.d{left:auto;right:10px}.hero{padding-top:60px}.drop{flex-wrap:wrap;border-radius:22px;padding:8px}.drop .btn{width:100%}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
@@ -108,7 +111,7 @@ dialog .btn{width:100%;min-height:50px}.dx{float:right;background:none;border:0;
   <a class=logo href="#"><svg viewBox="0 0 256 256" aria-hidden=true><defs><linearGradient id=g x1=0 y1=0 x2=1 y2=1><stop offset=0 stop-color="#2F54FF"/><stop offset=1 stop-color="#6E8BFF"/></linearGradient></defs><rect x=16 y=16 width=224 height=224 rx=64 fill="url(#g)"/><path d="M70 82l58 104 58-104" fill=none stroke="#fff" stroke-width=26 stroke-linecap=round stroke-linejoin=round /><circle cx=188 cy=188 r=14 fill="#fff"/></svg>Vice.ai</a>
   <div class=links><a href="#features">Features</a><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="/studio.html">Studio</a></div>
   <span class=sp></span>
-  <button class=btn id=nav_in>Sign in</button><a class="btn p" href="#pricing">Get Vice.ai</a>
+  <button class=btn id=nav_in>Sign in</button><button class="btn p" id=nav_up>Get Vice.ai</button>
 </nav>
 <main class=wrap>
   <header class=hero>
@@ -170,6 +173,12 @@ dialog .btn{width:100%;min-height:50px}.dx{float:right;background:none;border:0;
   <form id=af><label>Email<input id=ae type=email autocomplete=email required></label><label>Password<input id=apw type=password autocomplete=new-password minlength=8 required></label>
   <button class="btn p" id=ago type=submit>Continue to payment</button></form>
   <div class=dl><a href="#" id=asw>I already have an account</a><a href="#" id=afp>Forgot password?</a></div>
+  <div class=pl id=apl hidden>
+    <button class=po data-pick=starter><b>Starter</b><span>100 Shorts a month · 1 computer</span><em>$15<small>/mo</small></em></button>
+    <button class="po best" data-pick=pro><b>Pro <i>Most popular</i></b><span>250 Shorts a month · 2 computers</span><em>$29<small>/mo</small></em></button>
+    <button class=po data-pick=studio><b>Studio</b><span>600 Shorts a month · 3 computers</span><em>$59<small>/mo</small></em></button>
+    <p class=fine>Make Shorts online in Studio or in the app. Cancel anytime.</p>
+  </div>
   <div class=msg id=am aria-live=polite></div>
 </dialog>
 
@@ -224,12 +233,14 @@ async function auth(path, body, token, method) {
 const say = (t, k) => { $('am').textContent = t || ''; $('am').className = 'msg' + (k ? ' ' + k : ''); };
 const setMode = x => { mode = x; const rs = x === 'reset';
   $('ah').textContent = rs ? 'Choose a new password' : x === 'up' ? 'Create your account' : 'Sign in';
-  $('ago').textContent = rs ? 'Save new password' : x === 'up' ? 'Continue to payment' : (plan ? 'Sign in and pay' : 'Sign in');
+  $('ago').textContent = rs ? 'Save new password' : x === 'up' ? (plan ? 'Continue to payment' : 'Create account') : (plan ? 'Sign in and pay' : 'Sign in');
+  $('af').hidden = false; $('apl').hidden = true; $('ap').textContent = rs ? 'Pick a new password for your account.' : x === 'up' ? 'One account for the website, Studio and the app.' : 'Welcome back.';
   $('ae').parentElement.style.display = $('asw').parentElement.style.display = rs ? 'none' : ''; $('ae').required = !rs;
   $('asw').textContent = x === 'up' ? 'I already have an account' : 'Create an account'; $('apw').autocomplete = x === 'in' ? 'current-password' : 'new-password'; say(''); };
 const open = (x, p) => { plan = p; setMode(x); $('auth').showModal(); };
 document.querySelectorAll('[data-plan]').forEach(b => b.onclick = () => open('up', b.dataset.plan));
 $('nav_in').onclick = () => open('in', null);
+$('nav_up').onclick = () => open('up', null);
 if (location.hash === '#signin') open('in', null);  // direct link: <site>/#signin
 if (location.hash === '#signup') open('up', null);
 { // coming back from an email link: #access_token=…&type=recovery|signup, or #error=…&error_description=…
@@ -237,12 +248,27 @@ if (location.hash === '#signup') open('up', null);
   if (h.has('access_token') || h.has('error')) history.replaceState(null, '', location.pathname + location.search);
   if (h.get('error')) { open('in', null); say(h.get('error_code') === 'otp_expired' ? 'That email link has expired or was already used. Type your email and click Forgot password? to get a new one.' : (h.get('error_description') || 'That link didn\'t work.'), 'err'); }
   else if (h.get('access_token') && h.get('type') === 'recovery') { session = { access_token: h.get('access_token') }; open('reset', null); }
-  else if (h.get('access_token')) { session = { access_token: h.get('access_token') }; open('in', null); say('Email confirmed. You\'re signed in. Download the app and sign in there with the same account.', 'ok'); }
+  else if (h.get('access_token')) { session = { access_token: h.get('access_token') }; open('in', null); afterAuth(); }
 }
 $('dx').onclick = () => $('auth').close();
 $('asw').onclick = e => { e.preventDefault(); setMode(mode === 'up' ? 'in' : 'up'); };
 $('afp').onclick = async e => { e.preventDefault(); if (!$('ae').value) return say('Type your email first.', 'err'); const [rc, rd] = await auth('recover?redirect_to=' + BACK, { email: $('ae').value.trim() }); if (rc === 429) return say(rd.msg || 'Please wait a minute before asking for another link.', 'err'); say('If that email has an account, we sent a reset link.', 'ok'); };
 $('drop').onsubmit = e => { e.preventDefault(); location.hash = '#pricing'; };
+const API = "https://kiermedia2025--viceai-online-web.us-east.modal.run";  // Vice.ai Online (plan status)
+function choosePlan() {
+  $('af').hidden = true; $('asw').parentElement.style.display = 'none'; $('apl').hidden = false;
+  $('ah').textContent = 'Choose your plan'; $('ap').textContent = 'Your account is ready. Pick a plan to start making Shorts.'; say('');
+  if (!$('auth').open) $('auth').showModal();
+}
+document.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => { plan = b.dataset.pick; document.querySelectorAll('[data-pick]').forEach(x => x.disabled = true); checkout().finally(() => document.querySelectorAll('[data-pick]').forEach(x => x.disabled = false)); });
+async function afterAuth() {
+  if (plan) return checkout();
+  say('Signed in…', 'ok');
+  let me = null;
+  try { me = await fetch(API + '/me', { headers: { Authorization: 'Bearer ' + session.access_token } }).then(r => r.ok ? r.json() : null); } catch (e) {}
+  if (me && me.active) { say('You already have a plan. Opening Studio…', 'ok'); return setTimeout(() => location.href = '/studio.html', 900); }
+  choosePlan();
+}
 async function checkout() {
   say('Opening secure checkout…');
   const nonce = [...crypto.getRandomValues(new Uint8Array(18))].map(b => b.toString(16).padStart(2, '0')).join('');
@@ -262,10 +288,9 @@ $('af').onsubmit = async e => {
   let [code, d] = mode === 'up' ? await auth('signup?redirect_to=' + BACK, { email, password }) : await auth('token?grant_type=password', { email, password });
   $('ago').disabled = false; $('apw').value = '';
   if (code >= 400) return say(d.msg || d.error_description || d.message || 'That didn\'t work.', 'err');
-  if (!d.access_token) { setMode('in'); return say('Check your email and open the link to confirm your account, then sign in here.', 'ok'); }
+  if (!d.access_token) { setMode('in'); return say('Almost there: open the link we just emailed you to confirm your account. It brings you back here to choose a plan.', 'ok'); }
   session = d;
-  if (plan) return checkout();
-  say('Signed in. Make Shorts online in Studio (viceai.live/studio.html), or download the app and sign in there.', 'ok'); setTimeout(() => location.href = '/studio.html', 1800);
+  afterAuth();
 };
 </script>
 </body>
