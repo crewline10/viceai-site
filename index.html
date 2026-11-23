@@ -216,21 +216,32 @@ showcase();
 
 // accounts (Supabase Auth) + checkout
 let mode = 'up', plan = 'pro', session = null;
-async function auth(path, body, token) {
-  const r = await fetch(CFG.supabase + '/auth/v1/' + path, { method: 'POST', headers: { apikey: CFG.key, 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) }, body: JSON.stringify(body || {}) });
+const BACK = encodeURIComponent(location.origin + '/');  // email links (confirm, reset) come back to this site
+async function auth(path, body, token, method) {
+  const r = await fetch(CFG.supabase + '/auth/v1/' + path, { method: method || 'POST', headers: { apikey: CFG.key, 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) }, body: JSON.stringify(body || {}) });
   return [r.status, await r.json().catch(() => ({}))];
 }
 const say = (t, k) => { $('am').textContent = t || ''; $('am').className = 'msg' + (k ? ' ' + k : ''); };
-const setMode = x => { mode = x; $('ah').textContent = x === 'up' ? 'Create your account' : 'Sign in'; $('ago').textContent = x === 'up' ? 'Continue to payment' : (plan ? 'Sign in and pay' : 'Sign in');
-  $('asw').textContent = x === 'up' ? 'I already have an account' : 'Create an account'; $('apw').autocomplete = x === 'up' ? 'new-password' : 'current-password'; say(''); };
+const setMode = x => { mode = x; const rs = x === 'reset';
+  $('ah').textContent = rs ? 'Choose a new password' : x === 'up' ? 'Create your account' : 'Sign in';
+  $('ago').textContent = rs ? 'Save new password' : x === 'up' ? 'Continue to payment' : (plan ? 'Sign in and pay' : 'Sign in');
+  $('ae').parentElement.style.display = $('asw').parentElement.style.display = rs ? 'none' : ''; $('ae').required = !rs;
+  $('asw').textContent = x === 'up' ? 'I already have an account' : 'Create an account'; $('apw').autocomplete = x === 'in' ? 'current-password' : 'new-password'; say(''); };
 const open = (x, p) => { plan = p; setMode(x); $('auth').showModal(); };
 document.querySelectorAll('[data-plan]').forEach(b => b.onclick = () => open('up', b.dataset.plan));
 $('nav_in').onclick = () => open('in', null);
 if (location.hash === '#signin') open('in', null);  // direct link: <site>/#signin
 if (location.hash === '#signup') open('up', null);
+{ // coming back from an email link: #access_token=…&type=recovery|signup, or #error=…&error_description=…
+  const h = new URLSearchParams(location.hash.slice(1));
+  if (h.has('access_token') || h.has('error')) history.replaceState(null, '', location.pathname + location.search);
+  if (h.get('error')) { open('in', null); say(h.get('error_code') === 'otp_expired' ? 'That email link has expired or was already used. Type your email and click Forgot password? to get a new one.' : (h.get('error_description') || 'That link didn\'t work.'), 'err'); }
+  else if (h.get('access_token') && h.get('type') === 'recovery') { session = { access_token: h.get('access_token') }; open('reset', null); }
+  else if (h.get('access_token')) { session = { access_token: h.get('access_token') }; open('in', null); say('Email confirmed. You\'re signed in. Download the app and sign in there with the same account.', 'ok'); }
+}
 $('dx').onclick = () => $('auth').close();
 $('asw').onclick = e => { e.preventDefault(); setMode(mode === 'up' ? 'in' : 'up'); };
-$('afp').onclick = async e => { e.preventDefault(); if (!$('ae').value) return say('Type your email first.', 'err'); await auth('recover', { email: $('ae').value }); say('If that email has an account, we sent a reset link.', 'ok'); };
+$('afp').onclick = async e => { e.preventDefault(); if (!$('ae').value) return say('Type your email first.', 'err'); const [rc, rd] = await auth('recover?redirect_to=' + BACK, { email: $('ae').value.trim() }); if (rc === 429) return say(rd.msg || 'Please wait a minute before asking for another link.', 'err'); say('If that email has an account, we sent a reset link.', 'ok'); };
 $('drop').onsubmit = e => { e.preventDefault(); location.hash = '#pricing'; };
 async function checkout() {
   say('Opening secure checkout…');
@@ -242,7 +253,13 @@ async function checkout() {
 $('af').onsubmit = async e => {
   e.preventDefault(); $('ago').disabled = true;
   const email = $('ae').value.trim(), password = $('apw').value;
-  let [code, d] = mode === 'up' ? await auth('signup', { email, password }) : await auth('token?grant_type=password', { email, password });
+  if (mode === 'reset') {
+    const [c, r] = await auth('user', { password }, session.access_token, 'PUT');
+    $('ago').disabled = false; $('apw').value = '';
+    if (c >= 400) return say(r.msg || r.message || 'Couldn\'t save it. Ask for a new reset link and try again.', 'err');
+    setMode('in'); return say('New password saved. Sign in with it here and in the app.', 'ok');
+  }
+  let [code, d] = mode === 'up' ? await auth('signup?redirect_to=' + BACK, { email, password }) : await auth('token?grant_type=password', { email, password });
   $('ago').disabled = false; $('apw').value = '';
   if (code >= 400) return say(d.msg || d.error_description || d.message || 'That didn\'t work.', 'err');
   if (!d.access_token) { setMode('in'); return say('Check your email and open the link to confirm your account, then sign in here.', 'ok'); }
