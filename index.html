@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vice.ai</title>
+<meta name="description" content="Turn any gaming stream into ready-to-post Shorts: face tracking, captions, hooks and scheduling, picked by AI.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F7FF;--p:#fff;--c:#EEF2FF;--l:#DFE5F5;--t:#0B1220;--m:#5A6478;--a:#2F54FF;--ok:#12B76A;--f:#F04438;
+  --grad:linear-gradient(135deg,#2F54FF 0%,#5B74FF 60%,#7C93FF 100%);--sh:0 1px 2px rgba(16,24,40,.04),0 8px 24px rgba(47,84,255,.06);--fd:'Montserrat','Arial Black',system-ui,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--t);font:16px/1.55 'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--a)}h1,h2,h3{font-family:var(--fd);letter-spacing:-.03em;margin:0}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(80% 60% at 50% -10%,#DCE6FF 0%,rgba(220,230,255,0) 70%),var(--bg)}
+.orbit{position:fixed;left:50%;top:44vh;width:1500px;height:1500px;margin:-750px 0 0 -750px;z-index:-1;pointer-events:none;opacity:.5;animation:spin 140s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.wrap{width:min(1180px,calc(100% - 32px));margin:0 auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:12px 22px;font:600 15px 'Poppins',sans-serif;border:1px solid var(--l);background:#fff;color:var(--t);cursor:pointer;text-decoration:none;transition:transform .18s,box-shadow .18s,filter .18s}
+.btn:hover{transform:translateY(-2px)}.btn.p{background:var(--grad);background-size:200% 100%;color:#fff;border:0;box-shadow:0 10px 26px rgba(47,84,255,.32);animation:shine 6s ease-in-out infinite}
+.btn.dark{background:var(--t);color:#fff;border:0}
+@keyframes shine{0%,100%{background-position:0 0}50%{background-position:100% 0}}
+.bar{background:var(--grad);color:#fff;text-align:center;font:600 13px 'Poppins',sans-serif;padding:9px 12px}
+nav{position:sticky;top:12px;z-index:20;margin:14px auto 0;width:min(1180px,calc(100% - 32px));display:flex;align-items:center;gap:6px;padding:10px 10px 10px 20px;background:rgba(255,255,255,.85);backdrop-filter:blur(14px);border:1px solid var(--l);border-radius:999px;box-shadow:0 10px 30px rgba(47,84,255,.1)}
+.logo{display:flex;align-items:center;gap:9px;font:900 22px var(--fd);letter-spacing:-.03em;color:var(--t);text-decoration:none}
+.logo svg{width:30px;height:30px}
+nav .links{display:flex;gap:4px;margin-left:24px}nav .links a{color:var(--m);text-decoration:none;font-weight:500;padding:8px 14px;border-radius:999px}nav .links a:hover{background:var(--c);color:var(--t)}
+nav .sp{flex:1}
+.hero{text-align:center;padding:90px 0 40px;display:flex;flex-direction:column;align-items:center;gap:22px}
+.badge{font:700 13px 'Poppins',sans-serif;letter-spacing:.1em;color:var(--a);background:rgba(47,84,255,.08);border:1px solid rgba(47,84,255,.18);padding:7px 16px;border-radius:999px}
+.hero h1{font-size:clamp(42px,7.4vw,96px);line-height:.98;text-transform:uppercase;max-width:1000px}
+.hero h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:19px;color:var(--m);max-width:640px;margin:0}
+.drop{width:min(720px,100%);display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--l);border-radius:999px;padding:7px 7px 7px 22px;box-shadow:0 16px 40px rgba(47,84,255,.12)}
+.drop input{flex:1;min-width:0;border:0;outline:0;font:15px 'Poppins',sans-serif;background:none}
+.plats{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;color:var(--m);font-size:14px}.plats b{color:var(--t)}
+.up{animation:up .7s both}.d1{animation-delay:.08s}.d2{animation-delay:.16s}.d3{animation-delay:.24s}.d4{animation-delay:.32s}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+/* showcase */
+.fan{position:relative;height:600px;margin:20px 0 10px;border-radius:32px;overflow:hidden;background:radial-gradient(60% 70% at 50% 40%,#E3E9FF 0%,rgba(227,233,255,0) 70%),linear-gradient(180deg,#F7F9FF,#EDF1FF)}
+.ph{position:absolute;left:50%;top:40px;width:240px;margin-left:-120px;aspect-ratio:9/16;border-radius:34px;padding:7px;background:#fff;box-shadow:0 24px 50px rgba(16,24,40,.18);transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .5s}
+.ph .s{width:100%;height:100%;border-radius:28px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.ph .cam{flex:0 0 42%;background:linear-gradient(160deg,#3B2F5E,#0F1630);position:relative}
+.ph .cam::after{content:"";position:absolute;left:50%;top:22%;width:64px;height:64px;margin-left:-32px;border-radius:50%;background:linear-gradient(180deg,#FFD7B8,#E8A27C);box-shadow:0 46px 0 6px #1E2A55}
+.ph .hk{position:absolute;left:8px;right:8px;top:38%;font:800 12px/1.2 var(--fd);color:#fff;text-align:center;text-shadow:0 2px 0 #000}
+.ph .s img{width:100%;height:100%;object-fit:cover;display:block}
+.ph .who{position:absolute;left:0;right:0;bottom:-46px;display:flex;align-items:center;justify-content:center;gap:8px;font:700 14px 'Poppins',sans-serif;color:var(--t);transition:opacity .4s}.ph .who i{width:28px;height:28px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font:800 12px var(--fd);font-style:normal}.ph .who small{color:var(--m);font-weight:600}.ph:not([data-slot="0"]) .who{opacity:0}
+.ph .game{flex:1;background:var(--g,linear-gradient(180deg,#1C7CFF,#0B3D91));position:relative}
+.ph .cap{position:absolute;left:0;right:0;bottom:24%;text-align:center;font:900 22px var(--fd);color:#fff;text-shadow:0 3px 0 #000,0 0 12px rgba(0,0,0,.4)}.ph .cap b{color:#FFD43B}
+.ph[data-slot="0"]{transform:scale(1.12);z-index:5}
+.ph[data-slot="-1"]{transform:translateX(-250px) translateY(26px) rotate(-3deg) scale(.95);z-index:4}.ph[data-slot="1"]{transform:translateX(250px) translateY(26px) rotate(3deg) scale(.95);z-index:4}
+.ph[data-slot="-2"]{transform:translateX(-480px) translateY(46px) rotate(-6deg) scale(.86);z-index:3}.ph[data-slot="2"]{transform:translateX(480px) translateY(46px) rotate(6deg) scale(.86);z-index:3}
+.ph[data-slot="out"]{opacity:0;transform:translateY(60px) scale(.8)}
+.pill{position:absolute;z-index:6;background:#fff;border-radius:999px;padding:11px 18px;font:700 15px 'Poppins',sans-serif;box-shadow:0 12px 30px rgba(16,24,40,.14);animation:bob 5s ease-in-out infinite}.pill i{font-style:normal;color:var(--a);margin-right:6px}
+.pill.a{left:calc(50% - 250px);top:70px}.pill.b{left:calc(50% - 270px);top:310px;animation-delay:1.2s}.pill.c{left:calc(50% + 150px);top:190px;animation-delay:.6s}.pill.d{left:calc(50% + 140px);top:440px;animation-delay:1.8s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+/* sections */
+section.sec{padding:80px 0 20px;text-align:center}
+.sec h2{font-size:clamp(30px,4.4vw,52px);line-height:1.05}.sec>.wrap>p{color:var(--m);font-size:18px;max-width:640px;margin:12px auto 0}
+.grid4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:36px;text-align:left}
+.card{background:#fff;border:1px solid var(--l);border-radius:26px;padding:28px;box-shadow:var(--sh);transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(47,84,255,.14)}.card .k{font:700 13px 'Poppins',sans-serif;color:var(--a)}.card h3{font-size:24px;margin:6px 0 8px}.card p{margin:0;color:var(--m)}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:36px;text-align:left}
+.step{background:#fff;border:1px solid var(--l);border-radius:22px;padding:24px;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s}.step:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(47,84,255,.14)}
+.step b{position:absolute;top:18px;right:20px;font:900 44px var(--fd);color:#EEF2FF}
+.ic{width:64px;height:64px;border-radius:18px;background:var(--grad);display:grid;place-items:center;margin-bottom:14px;box-shadow:0 10px 24px rgba(47,84,255,.3);position:relative}
+.ic svg{width:32px;height:32px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ic.link svg{animation:wig 2.6s ease-in-out infinite}@keyframes wig{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(10deg)}60%{transform:rotate(0)}}
+.ic.link::after{content:"";position:absolute;inset:-6px;border-radius:22px;border:2px solid rgba(47,84,255,.35);animation:ring 2.6s ease-out infinite}@keyframes ring{0%{opacity:1;transform:scale(.9)}100%{opacity:0;transform:scale(1.25)}}
+.ic.cut svg .bl{animation:snip 1.8s ease-in-out infinite;transform-origin:12px 12px}@keyframes snip{0%,100%{transform:rotate(0)}50%{transform:rotate(16deg)}}
+.ic.cut i{position:absolute;left:10px;right:10px;bottom:9px;height:4px;border-radius:2px;background:rgba(255,255,255,.35);overflow:hidden}.ic.cut i::after{content:"";position:absolute;inset:0;width:40%;background:#fff;border-radius:2px;animation:prog 1.8s ease-in-out infinite}@keyframes prog{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
+.ic.cal svg .ck{stroke-dasharray:14;stroke-dashoffset:14;animation:tick 2.4s ease-in-out infinite}@keyframes tick{0%,20%{stroke-dashoffset:14}55%,100%{stroke-dashoffset:0}}
+.ic.cal::before{content:"";position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;background:#12B76A;border:2px solid #fff;animation:pulse 2.4s ease-in-out infinite}@keyframes pulse{0%,100%{transform:scale(.8)}50%{transform:scale(1.1)}}
+.step .demo{margin-top:14px;font:600 12px 'Poppins',sans-serif;color:var(--m);background:#F7F9FF;border:1px solid var(--l);border-radius:12px;padding:9px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.step .demo .typ{display:inline-block;overflow:hidden;vertical-align:bottom;border-right:2px solid var(--a);animation:type 4s steps(28) infinite,caret .7s step-end infinite;white-space:nowrap;max-width:0}
+@keyframes type{0%{max-width:0}50%,80%{max-width:28ch}100%{max-width:0}}@keyframes caret{50%{border-color:transparent}}
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:36px;text-align:left;align-items:stretch}
+.plan{background:#fff;border:1px solid var(--l);border-radius:26px;padding:30px;display:flex;flex-direction:column;gap:10px;position:relative;box-shadow:var(--sh)}
+.plan.hot{border:2px solid var(--a);box-shadow:0 0 0 2px rgba(47,84,255,.12),0 20px 50px rgba(47,84,255,.2);transform:translateY(-8px)}
+.plan .tag{position:absolute;top:-13px;left:24px;background:var(--grad);color:#fff;font:700 12px 'Poppins',sans-serif;padding:4px 12px;border-radius:999px}
+.plan h3{font-size:22px}.price{font:900 46px var(--fd);letter-spacing:-.03em}.price small{font:600 15px 'Poppins',sans-serif;color:var(--m)}
+.plan ul{list-style:none;padding:0;margin:4px 0 14px;display:grid;gap:8px;color:var(--m)}.plan li::before{content:"✓";color:var(--a);font-weight:800;margin-right:8px}
+.plan .btn{margin-top:auto}
+.faq{max-width:760px;margin:30px auto 0;text-align:left}.faq details{background:#fff;border:1px solid var(--l);border-radius:16px;padding:18px 22px;margin-bottom:10px}
+.faq summary{cursor:pointer;font-weight:700}.faq p{color:var(--m);margin:10px 0 0}
+.cta{background:var(--grad);border-radius:32px;color:#fff;padding:60px 28px;text-align:center;margin:80px 0 40px;box-shadow:0 24px 60px rgba(47,84,255,.3)}
+.cta h2{color:#fff;font-size:clamp(28px,4vw,46px)}.cta p{color:rgba(255,255,255,.85)}.cta .btn{background:#fff;color:var(--a);border:0}
+footer{color:var(--m);font-size:14px;padding:30px 0 50px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1)}.rv.in{opacity:1;transform:none}
+/* sign-up dialog */
+dialog{border:0;border-radius:26px;padding:28px;width:min(420px,calc(100% - 32px));box-shadow:0 30px 80px rgba(16,24,40,.2);animation:pop .25s ease-out}
+dialog::backdrop{background:rgba(11,18,32,.4);backdrop-filter:blur(6px)}@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+dialog h2{font-size:24px;margin-bottom:6px}dialog p{color:var(--m);margin:0 0 16px}
+dialog label{display:grid;gap:6px;font-weight:600;font-size:13px;color:var(--m);margin-bottom:12px}
+dialog input{font:15px 'Poppins',sans-serif;padding:12px 14px;border:1px solid var(--l);border-radius:12px;background:#F7F9FF;color:var(--t)}
+dialog input:focus{outline:0;border-color:var(--a);box-shadow:0 0 0 4px rgba(47,84,255,.14)}
+dialog .btn{width:100%;min-height:50px}.dx{float:right;background:none;border:0;font-size:22px;color:var(--m);cursor:pointer}
+.dl{display:flex;justify-content:space-between;font-size:13px;margin-top:12px;color:var(--m)}.msg{min-height:20px;font-size:14px;margin-top:10px}.msg.err{color:var(--f)}.msg.ok{color:var(--ok)}
+@media (max-width:860px){nav .links{display:none}.grid4,.steps,.plans{grid-template-columns:1fr}.plan.hot{transform:none}.fan{height:520px}.ph{width:200px;margin-left:-100px}.ph[data-slot="-2"],.ph[data-slot="2"]{opacity:0}.ph[data-slot="-1"]{transform:translateX(-160px) translateY(24px) rotate(-4deg) scale(.86)}.ph[data-slot="1"]{transform:translateX(160px) translateY(24px) rotate(4deg) scale(.86)}.pill.a,.pill.b{left:10px}.pill.c,.pill.d{left:auto;right:10px}.hero{padding-top:60px}.drop{flex-wrap:wrap;border-radius:22px;padding:8px}.drop .btn{width:100%}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<svg class=orbit viewBox="0 0 1500 1500" aria-hidden=true><g fill=none stroke="#94A6D9" stroke-width="1.4" stroke-dasharray="7 9"><circle cx=750 cy=750 r=300 /><circle cx=750 cy=750 r=520 /><circle cx=750 cy=750 r=730 /></g><g fill="#2F54FF"><circle cx=750 cy=450 r=7 /><circle cx=1268 cy=770 r=7 /><circle cx=270 cy=1030 r=7 /></g></svg>
+<div class=bar>New: built-in AI picks your best moments. No AI tools to set up.</div>
+<nav>
+  <a class=logo href="#"><svg viewBox="0 0 256 256" aria-hidden=true><defs><linearGradient id=g x1=0 y1=0 x2=1 y2=1><stop offset=0 stop-color="#2F54FF"/><stop offset=1 stop-color="#6E8BFF"/></linearGradient></defs><rect x=16 y=16 width=224 height=224 rx=64 fill="url(#g)"/><path d="M70 82l58 104 58-104" fill=none stroke="#fff" stroke-width=26 stroke-linecap=round stroke-linejoin=round /><circle cx=188 cy=188 r=14 fill="#fff"/></svg>Vice.ai</a>
+  <div class=links><a href="#features">Features</a><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></div>
+  <span class=sp></span>
+  <button class=btn id=nav_in>Sign in</button><a class="btn p" href="#pricing">Get Vice.ai</a>
+</nav>
+<main class=wrap>
+  <header class=hero>
+    <span class="badge up">AI CLIPS FOR GAMING STREAMS</span>
+    <h1 class="up d1">Turn any stream into <span>viral Shorts</span></h1>
+    <p class="up d2">Paste a link. Vice.ai finds the best moments, keeps the streamer's face in frame, adds captions and a hook, and schedules them to YouTube.</p>
+    <form class="drop up d3" id=drop><input id=drop_in placeholder="Paste a YouTube, Twitch or Kick link" aria-label="Stream link"><button class="btn dark" type=submit>Get clips</button></form>
+    <div class="plats up d4"><span>Works with</span><b>YouTube</b><b>Twitch</b><b>Kick</b><b>TikTok</b><b>X</b><b>Instagram</b><span>and more</span></div>
+  </header>
+  <div class="fan rv" id=fan aria-label="Example Shorts">
+    <span class="pill a"><i>◉</i>Facecam</span><span class="pill b"><i>▤</i>Captions</span><span class="pill c"><i>T</i>Hook</span><span class="pill d"><i>◷</i><em id=sc>Score 82</em></span>
+  </div>
+
+  <section class=sec id=features><div class=wrap>
+    <h2 class=rv>Four ways to make Shorts</h2><p class=rv>Let Vice.ai do everything, or step in wherever you want.</p>
+    <div class=grid4>
+      <article class="card rv"><span class=k>Auto clips</span><h3>Paste a link, get Shorts</h3><p>The built-in AI finds the moments with a setup and a payoff, frames the face, burns in word-by-word captions and writes the hook.</p></article>
+      <article class="card rv"><span class=k>Live hunt</span><h3>Clips while they're live</h3><p>Watches your streamers and cuts a Short the moment chat explodes, so you post first.</p></article>
+      <article class="card rv"><span class=k>Edit with words</span><h3>Ask, and it re-cuts</h3><p>Type "start on the reaction" or "bigger captions" and get a new version. The original always stays.</p></article>
+      <article class="card rv"><span class=k>Auto-post</span><h3>Scheduled to YouTube</h3><p>Approve your Shorts, pick the times, and YouTube publishes each one on schedule, even with your computer off.</p></article>
+    </div>
+  </div></section>
+
+  <section class=sec id=how><div class=wrap>
+    <h2 class=rv>From stream to Shorts in three steps</h2>
+    <div class=steps>
+      <div class="step rv"><b>1</b><div class="ic link"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg></div><h3>Paste a link</h3><p>Or pick your favourite streamers and let Vice.ai check for new videos.</p><div class=demo>🔗 <span class=typ>youtube.com/watch?v=gta6-stream</span></div></div>
+      <div class="step rv"><b>2</b><div class="ic cut"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><g class=bl><path d="M20 4L8.12 15.88"/><path d="M14.47 14.48L20 20"/><path d="M8.12 8.12L12 12"/></g></svg><i></i></div><h3>Get finished Shorts</h3><p>9:16, face tracked, captioned, with a hook, a title and hashtags.</p><div class=demo>✂️ Finding the best moments…</div></div>
+      <div class="step rv"><b>3</b><div class="ic cal"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path class=ck d="M8.5 15.5l2.5 2.5 4.5-5"/></svg></div><h3>Approve and schedule</h3><p>Review each one, then schedule it to YouTube in one click.</p><div class=demo>📅 Tue 6:00 PM · YouTube Shorts</div></div>
+    </div>
+  </div></section>
+
+  <section class=sec id=pricing><div class=wrap>
+    <h2 class=rv>Simple monthly plans</h2><p class=rv>Everything included. Cancel any time.</p>
+    <div class=plans>
+      <div class="plan rv"><h3>Starter</h3><div class=price>$12<small>/month</small></div><ul><li>100 Shorts a month</li><li>1 computer</li><li>Captions, hooks, face tracking</li><li>YouTube scheduling</li></ul><button class=btn data-plan=starter>Choose Starter</button></div>
+      <div class="plan hot rv"><span class=tag>Most popular</span><h3>Pro</h3><div class=price>$20<small>/month</small></div><ul><li>250 Shorts a month</li><li>2 computers</li><li>Everything in Starter</li><li>Live hunt and Autopilot</li></ul><button class="btn p" data-plan=pro>Choose Pro</button></div>
+      <div class="plan rv"><h3>Studio</h3><div class=price>$45<small>/month</small></div><ul><li>600 Shorts a month</li><li>3 computers</li><li>Everything in Pro</li><li>For clip channels and teams</li></ul><button class=btn data-plan=studio>Choose Studio</button></div>
+    </div>
+  </div></section>
+
+  <section class=sec id=faq><div class=wrap>
+    <h2 class=rv>Questions</h2>
+    <div class=faq>
+      <details class=rv><summary>What do I need?</summary><p>A Windows or Mac computer. You download Vice.ai, run the one-click setup, and sign in with the account you create here.</p></details>
+      <details class=rv><summary>Do I need my own AI tool?</summary><p>No. Vice.ai's AI is built in and included in every plan.</p></details>
+      <details class=rv><summary>Can I post other streamers' clips?</summary><p>Vice.ai shows each streamer's clipping rules and adds a credit line to every post. Always follow the creator's rules.</p></details>
+      <details class=rv><summary>Can I cancel?</summary><p>Yes, any time from the billing portal. Your plan runs to the end of the month you paid for.</p></details>
+    </div>
+  </div></section>
+
+  <div class="cta rv"><h2>Your next 10 Shorts are one link away</h2><p>Captions, framing and hooks included. Nothing is posted until you say so.</p><a class=btn href="#pricing">See plans</a></div>
+  <footer><span>© 2026 Vice.ai</span><span><a href="#faq">FAQ</a> · <a href="mailto:support@example.com">Support</a></span></footer>
+</main>
+
+<dialog id=auth>
+  <button class=dx id=dx aria-label=Close>×</button>
+  <h2 id=ah>Create your account</h2><p id=ap>You'll use this to sign in to the Vice.ai app.</p>
+  <form id=af><label>Email<input id=ae type=email autocomplete=email required></label><label>Password<input id=apw type=password autocomplete=new-password minlength=8 required></label>
+  <button class="btn p" id=ago type=submit>Continue to payment</button></form>
+  <div class=dl><a href="#" id=asw>I already have an account</a><a href="#" id=afp>Forgot password?</a></div>
+  <div class=msg id=am aria-live=polite></div>
+</dialog>
+
+<script>
+// Settings: the Supabase project (public values) and where the download lives.
+const CFG = {
+  supabase: "https://tsgqmbjmgwpjxcyrbmds.supabase.co",
+  key: "sb_publishable_ZU-yY6eHL5lPpO8CoTiu8Q_HQRg4wdS",
+};
+const $ = i => document.getElementById(i);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// scroll reveal
+const io = !reduce && 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' }) : null;
+document.querySelectorAll('.rv').forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + 'ms'; io ? io.observe(el) : el.classList.add('in'); });
+
+// showcase: illustrated example Shorts (no third-party footage), rotating
+const EX = [
+  ['STREAMER FINDS A SECRET CAR', 'NO <b>WAY</b>', '#1C7CFF,#0B3D91', 82], ['HEIST GOES WRONG IN 10 SECONDS', 'RUN <b>RUN</b>', '#FF7A3D,#8A1C00', 78],
+  ['BEACH CHASE ENDS IN THE OCEAN', 'HE <b>JUMPED</b>', '#12B76A,#05502E', 74], ['ROOFTOP JUMP NOBODY EXPECTED', 'OH <b>MY</b> GOD', '#7A5AF8,#2A1470', 71],
+  ['CHAT LOSES IT OVER THE SUPERCAR', 'THIS <b>RUNS</b>', '#F5A524,#7A4A00', 69]];
+const fan = $('fan'); let phs = [], cur = 0, scores = [];
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const place = () => { phs.forEach((p, i) => { let d = i - cur; if (d > phs.length / 2) d -= phs.length; if (d < -phs.length / 2) d += phs.length; p.dataset.slot = Math.abs(d) <= 2 ? d : 'out'; }); $('sc').textContent = scores[cur] != null ? 'Score ' + scores[cur] : 'Ready'; };
+async function showcase() {
+  let real = [];
+  try { real = await fetch('showcase/showcase.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : []); } catch { real = []; }
+  if (real.length) {  // finished Shorts made with Vice.ai; repeat a short list so the fan stays full
+    const one = real.slice(); while (real.length < 5) real = real.concat(one);  // whole copies: the same streamer never sits next to itself
+    real.slice(0, 12).forEach((x, i) => fan.insertAdjacentHTML('beforeend', `<div class=ph data-i=${i}><div class=s><img alt="${esc(x.hook || 'Example Short')}" src="${esc(x.img)}" loading=lazy></div>${x.who ? `<div class=who><i>${esc(x.who.trim()[0] || 'V').toUpperCase()}</i>${esc(x.who)}${x.score != null ? ` <small>· Score ${esc(x.score)}</small>` : ''}</div>` : ''}</div>`));
+    scores = real.slice(0, 12).map(x => x.score);
+  } else {
+    EX.forEach((x, i) => fan.insertAdjacentHTML('beforeend', `<div class=ph data-i=${i}><div class=s><div class=cam></div><div class=hk>${x[0]}</div><div class=game style="--g:linear-gradient(180deg,${x[2]})"><div class=cap>${x[1]}</div></div></div></div>`));
+    scores = EX.map(x => x[3]);
+  }
+  phs = [...fan.querySelectorAll('.ph')]; place();
+  phs.forEach((p, i) => p.onclick = () => { cur = i; place(); });
+  let paused = false; fan.onmouseenter = () => paused = true; fan.onmouseleave = () => paused = false;
+  if (!reduce && phs.length > 1) setInterval(() => { if (!paused) { cur = (cur + 1) % phs.length; place(); } }, 3400);
+}
+showcase();
+
+// accounts (Supabase Auth) + checkout
+let mode = 'up', plan = 'pro', session = null;
+async function auth(path, body, token) {
+  const r = await fetch(CFG.supabase + '/auth/v1/' + path, { method: 'POST', headers: { apikey: CFG.key, 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) }, body: JSON.stringify(body || {}) });
+  return [r.status, await r.json().catch(() => ({}))];
+}
+const say = (t, k) => { $('am').textContent = t || ''; $('am').className = 'msg' + (k ? ' ' + k : ''); };
+const setMode = x => { mode = x; $('ah').textContent = x === 'up' ? 'Create your account' : 'Sign in'; $('ago').textContent = x === 'up' ? 'Continue to payment' : (plan ? 'Sign in and pay' : 'Sign in');
+  $('asw').textContent = x === 'up' ? 'I already have an account' : 'Create an account'; $('apw').autocomplete = x === 'up' ? 'new-password' : 'current-password'; say(''); };
+const open = (x, p) => { plan = p; setMode(x); $('auth').showModal(); };
+document.querySelectorAll('[data-plan]').forEach(b => b.onclick = () => open('up', b.dataset.plan));
+$('nav_in').onclick = () => open('in', null);
+if (location.hash === '#signin') open('in', null);  // direct link: <site>/#signin
+if (location.hash === '#signup') open('up', null);
+$('dx').onclick = () => $('auth').close();
+$('asw').onclick = e => { e.preventDefault(); setMode(mode === 'up' ? 'in' : 'up'); };
+$('afp').onclick = async e => { e.preventDefault(); if (!$('ae').value) return say('Type your email first.', 'err'); await auth('recover', { email: $('ae').value }); say('If that email has an account, we sent a reset link.', 'ok'); };
+$('drop').onsubmit = e => { e.preventDefault(); location.hash = '#pricing'; };
+async function checkout() {
+  say('Opening secure checkout…');
+  const nonce = [...crypto.getRandomValues(new Uint8Array(18))].map(b => b.toString(16).padStart(2, '0')).join('');
+  const r = await fetch(CFG.supabase + '/functions/v1/create-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + session.access_token }, body: JSON.stringify({ nonce, plan }) });
+  const d = await r.json().catch(() => ({}));
+  if (d.url) location.href = d.url; else say(d.error || 'Checkout isn\'t available right now.', 'err');
+}
+$('af').onsubmit = async e => {
+  e.preventDefault(); $('ago').disabled = true;
+  const email = $('ae').value.trim(), password = $('apw').value;
+  let [code, d] = mode === 'up' ? await auth('signup', { email, password }) : await auth('token?grant_type=password', { email, password });
+  $('ago').disabled = false; $('apw').value = '';
+  if (code >= 400) return say(d.msg || d.error_description || d.message || 'That didn\'t work.', 'err');
+  if (!d.access_token) { setMode('in'); return say('Check your email and open the link to confirm your account, then sign in here.', 'ok'); }
+  session = d;
+  if (plan) return checkout();
+  say('Signed in. Download the app and sign in there with the same account.', 'ok');
+};
+</script>
+</body>
+</html>
