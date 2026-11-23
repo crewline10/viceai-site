@@ -106,7 +106,7 @@ dialog .btn{width:100%;min-height:50px}.dx{float:right;background:none;border:0;
 <div class=bar>New: built-in AI picks your best moments. No AI tools to set up.</div>
 <nav>
   <a class=logo href="#"><svg viewBox="0 0 256 256" aria-hidden=true><defs><linearGradient id=g x1=0 y1=0 x2=1 y2=1><stop offset=0 stop-color="#2F54FF"/><stop offset=1 stop-color="#6E8BFF"/></linearGradient></defs><rect x=16 y=16 width=224 height=224 rx=64 fill="url(#g)"/><path d="M70 82l58 104 58-104" fill=none stroke="#fff" stroke-width=26 stroke-linecap=round stroke-linejoin=round /><circle cx=188 cy=188 r=14 fill="#fff"/></svg>Vice.ai</a>
-  <div class=links><a href="#features">Features</a><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></div>
+  <div class=links><a href="#features">Features</a><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="/studio.html">Studio</a></div>
   <span class=sp></span>
   <button class=btn id=nav_in>Sign in</button><a class="btn p" href="#pricing">Get Vice.ai</a>
 </nav>
@@ -265,7 +265,7 @@ $('af').onsubmit = async e => {
   if (!d.access_token) { setMode('in'); return say('Check your email and open the link to confirm your account, then sign in here.', 'ok'); }
   session = d;
   if (plan) return checkout();
-  say('Signed in. Download the app and sign in there with the same account.', 'ok');
+  say('Signed in. Make Shorts online in Studio (viceai.live/studio.html), or download the app and sign in there.', 'ok'); setTimeout(() => location.href = '/studio.html', 1800);
 };
 </script>
 </body>
