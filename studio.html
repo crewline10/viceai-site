@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Vice.ai Studio</title>
+<meta name=description content="Make ready-to-post Shorts in your browser. Upload a video, get finished 9:16 Shorts with captions and hooks.">
+<link rel=preconnect href="https://fonts.googleapis.com"><link rel=preconnect href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Poppins:wght@500;600;700&display=swap" rel=stylesheet>
+<style>
+:root{--bg:#F4F7FF;--p:#fff;--c:#EEF2FF;--l:#DFE5F5;--t:#0B1220;--m:#5A6478;--a:#2F54FF;--ok:#12B76A;--f:#F04438;
+  --grad:linear-gradient(135deg,#2F54FF 0%,#5B74FF 60%,#7C93FF 100%);--sh:0 1px 2px rgba(16,24,40,.04),0 8px 24px rgba(47,84,255,.06);--fd:'Montserrat','Arial Black',system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--t);font:16px/1.55 'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(80% 60% at 50% -10%,#DCE6FF 0%,rgba(220,230,255,0) 70%),var(--bg)}
+a{color:var(--a)}h1,h2,h3{font-family:var(--fd);letter-spacing:-.03em;margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:12px 22px;font:600 15px 'Poppins',sans-serif;border:1px solid var(--l);background:#fff;color:var(--t);cursor:pointer;text-decoration:none;transition:transform .18s,box-shadow .18s,opacity .18s}
+.btn:hover{transform:translateY(-2px)}.btn:disabled{opacity:.5;cursor:default;transform:none}
+.btn.p{background:var(--grad);color:#fff;border:0;box-shadow:0 10px 26px rgba(47,84,255,.32)}
+.btn.s{padding:8px 14px;font-size:13px}
+nav{position:sticky;top:12px;z-index:20;margin:14px auto 0;width:min(1100px,calc(100% - 32px));display:flex;align-items:center;gap:10px;padding:10px 10px 10px 20px;background:rgba(255,255,255,.85);backdrop-filter:blur(14px);border:1px solid var(--l);border-radius:999px;box-shadow:0 10px 30px rgba(47,84,255,.1)}
+.logo{display:flex;align-items:center;gap:9px;font:900 22px var(--fd);letter-spacing:-.03em;color:var(--t);text-decoration:none}.logo svg{width:30px;height:30px}
+.tag{font:700 11px 'Poppins';letter-spacing:.08em;text-transform:uppercase;color:var(--a);background:var(--c);border-radius:999px;padding:3px 9px}
+.sp{flex:1}.who{font-size:13px;color:var(--m);text-align:right;line-height:1.3}.who b{color:var(--t)}
+main{width:min(1100px,calc(100% - 32px));margin:28px auto 80px}
+.card{background:var(--p);border:1px solid var(--l);border-radius:24px;box-shadow:var(--sh);padding:28px}
+.hero h1{font-size:clamp(28px,4vw,40px)}.hero p{color:var(--m);margin:6px 0 20px}
+.drop{border:2px dashed #C5D0F0;border-radius:20px;padding:34px 20px;text-align:center;cursor:pointer;transition:background .2s,border-color .2s;background:#FAFBFF}
+.drop:hover,.drop.on{background:var(--c);border-color:var(--a)}
+.drop .ic{width:54px;height:54px;margin:0 auto 10px;border-radius:16px;background:var(--grad);display:grid;place-items:center;box-shadow:0 10px 24px rgba(47,84,255,.3)}
+.drop .ic svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.drop b{display:block;font-size:17px}.drop span{color:var(--m);font-size:14px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;margin-top:18px}
+.row label{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px}
+input[type=range]{accent-color:var(--a);width:160px}
+.file{font-size:14px;color:var(--m);flex:1;min-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar{height:8px;border-radius:99px;background:var(--c);overflow:hidden;margin-top:14px;display:none}.bar i{display:block;height:100%;width:0;background:var(--grad);transition:width .3s}
+.msg{min-height:22px;font-size:14px;margin-top:10px;color:var(--m)}.msg.err{color:var(--f)}.msg.ok{color:var(--ok)}
+h2{font-size:22px;margin:36px 0 14px}
+.job{margin-bottom:16px}.jh{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.jh h3{font:600 16px 'Poppins';letter-spacing:0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill{font-size:12px;font-weight:700;border-radius:99px;padding:4px 10px;background:var(--c);color:var(--a);display:inline-flex;align-items:center;gap:6px}
+.pill.done{background:#E7F8F0;color:var(--ok)}.pill.failed{background:#FDECEB;color:var(--f)}
+.spin{width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:r 1s linear infinite}@keyframes r{to{transform:rotate(1turn)}}
+.when{font-size:13px;color:var(--m)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-top:16px}
+.short{background:#0B1220;border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.short video{width:100%;aspect-ratio:9/16;display:block;background:#000;object-fit:cover}
+.short .act{display:flex;gap:6px;padding:8px;background:#fff;border:1px solid var(--l);border-top:0;border-radius:0 0 16px 16px}
+.short .act .btn{flex:1;padding:7px 6px;font-size:12px;white-space:nowrap}
+.err-t{color:var(--f);font-size:14px;margin-top:8px}
+.empty{color:var(--m);text-align:center;padding:30px}
+.gate{max-width:420px;margin:40px auto}.gate h1{font-size:28px;margin-bottom:6px}.gate p{color:var(--m);margin:0 0 18px}
+.gate form{display:grid;gap:12px}.gate label{display:grid;gap:6px;font-size:14px;font-weight:600}
+.gate input{font:15px 'Poppins';padding:12px 14px;border:1px solid var(--l);border-radius:12px;background:#FAFBFF}
+.gate input:focus{outline:2px solid var(--a);outline-offset:1px}
+[hidden]{display:none!important}
+@media(max-width:600px){nav{padding-left:14px}.logo{font-size:19px}.card{padding:20px}.who{display:none}.grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<nav>
+  <a class=logo href="/"><svg viewBox="0 0 256 256" aria-hidden=true><defs><linearGradient id=g x1=0 y1=0 x2=1 y2=1><stop offset=0 stop-color="#2F54FF"/><stop offset=1 stop-color="#6E8BFF"/></linearGradient></defs><rect x=16 y=16 width=224 height=224 rx=64 fill="url(#g)"/><path d="M70 82l58 104 58-104" fill=none stroke="#fff" stroke-width=26 stroke-linecap=round stroke-linejoin=round /><circle cx=188 cy=188 r=14 fill="#fff"/></svg>Vice.ai</a>
+  <span class=tag>Studio</span><span class=sp></span>
+  <div class=who id=who></div>
+  <button class="btn s" id=out hidden>Sign out</button>
+</nav>
+
+<main>
+  <section class="card gate" id=gate hidden>
+    <h1>Sign in to Studio</h1><p>Use the account you made on viceai.live.</p>
+    <form id=gf><label>Email<input id=ge type=email autocomplete=email required></label><label>Password<input id=gp type=password autocomplete=current-password required></label>
+      <button class="btn p" id=gb>Sign in</button></form>
+    <div class=msg id=gm></div>
+    <p style="margin-top:14px;font-size:14px">No account yet? <a href="/#pricing">Pick a plan</a> · <a href="/#signin">Forgot password?</a></p>
+  </section>
+
+  <section id=app hidden>
+    <div class="card hero">
+      <h1>Turn a video into Shorts</h1>
+      <p>Upload a stream or gameplay video. Vice.ai finds the best moments and makes finished 9:16 Shorts with captions and a hook. Nothing to install.</p>
+      <div class=drop id=drop tabindex=0 role=button aria-label="Choose a video">
+        <div class=ic><svg viewBox="0 0 24 24"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg></div>
+        <b>Drop a video here or click to choose</b><span id=lim>MP4, MOV, MKV or WEBM</span>
+        <input type=file id=fi accept="video/*,.mkv" hidden>
+      </div>
+      <div class=row>
+        <div class=file id=fn>No video chosen</div>
+        <label>Shorts <input type=range id=n min=1 max=10 value=5><b id=nv>5</b></label>
+        <button class="btn p" id=go disabled>Make Shorts</button>
+      </div>
+      <div class=bar id=bar><i id=bi></i></div>
+      <div class=msg id=msg></div>
+    </div>
+    <h2>Your videos</h2>
+    <div id=jobs><div class=empty>Your Shorts will show up here.</div></div>
+  </section>
+</main>
+
+<script>
+const CFG = {
+  supabase: "https://tsgqmbjmgwpjxcyrbmds.supabase.co",
+  key: "sb_publishable_ZU-yY6eHL5lPpO8CoTiu8Q_HQRg4wdS",
+  api: "https://kiermedia2025--viceai-online-web.us-east.modal.run",   // the Vice.ai Online server (online/modal_app.py on Modal)
+};
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const say = (el, t, k) => { $(el).textContent = t || ''; $(el).className = 'msg' + (k ? ' ' + k : ''); };
+
+// ---- session (Supabase Auth), kept in this browser so a refresh doesn't sign you out
+let S = null;
+try { S = JSON.parse(localStorage.getItem('vice_s') || 'null'); } catch (e) {}
+const keep = d => { S = d ? { access_token: d.access_token, refresh_token: d.refresh_token, exp: Date.now() / 1000 + (d.expires_in || 3600) - 60, email: d.user?.email || S?.email } : null;
+  try { d ? localStorage.setItem('vice_s', JSON.stringify(S)) : localStorage.removeItem('vice_s'); } catch (e) {} };
+async function authPost(path, body) {
+  const r = await fetch(CFG.supabase + '/auth/v1/' + path, { method: 'POST', headers: { apikey: CFG.key, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  return [r.status, await r.json().catch(() => ({}))];
+}
+async function token() {
+  if (!S) return null;
+  if (Date.now() / 1000 < S.exp) return S.access_token;
+  const [c, d] = await authPost('token?grant_type=refresh_token', { refresh_token: S.refresh_token });
+  if (c >= 400 || !d.access_token) { keep(null); show(); return null; }
+  keep(d); return S.access_token;
+}
+async function api(path, opt = {}) {
+  const t = await token(); if (!t) throw new Error('Please sign in.');
+  const r = await fetch(CFG.api + path, { ...opt, headers: { ...(opt.headers || {}), Authorization: 'Bearer ' + t } });
+  const d = await r.json().catch(() => ({}));
+  if (r.status === 401) { keep(null); show(); }
+  if (!r.ok) throw new Error(d.detail || d.error || 'Something went wrong (' + r.status + ').');
+  return d;
+}
+
+$('gf').onsubmit = async e => {
+  e.preventDefault(); $('gb').disabled = true; say('gm', 'Signing in…');
+  const [c, d] = await authPost('token?grant_type=password', { email: $('ge').value.trim(), password: $('gp').value });
+  $('gb').disabled = false; $('gp').value = '';
+  if (c >= 400 || !d.access_token) return say('gm', d.msg || d.error_description || 'Wrong email or password.', 'err');
+  keep(d); show();
+};
+$('out').onclick = () => { keep(null); show(); };
+
+// ---- plan + upload
+let ME = null, file = null;
+async function loadMe() {
+  try {
+    ME = await api('/me');
+    $('who').innerHTML = ME.active ? `<b>${esc(ME.email)}</b><br>${esc(ME.plan[0].toUpperCase() + ME.plan.slice(1))} · ${ME.shorts_left} Shorts left this month` : `<b>${esc(ME.email)}</b><br>No active plan`;
+    if (!ME.active) say('msg', 'You need a plan to make Shorts. ', 'err'), $('msg').insertAdjacentHTML('beforeend', '<a href="/#pricing">Pick a plan</a>');
+    $('lim').textContent = `MP4, MOV, MKV or WEBM · up to ${ME.max_gb || 2} GB and ${(ME.max_minutes || 180) / 60} hours`;
+    $('n').max = Math.max(1, Math.min(ME.max_n || 10, ME.shorts_left || 1)); if (+$('n').value > +$('n').max) $('n').value = $('n').max; $('nv').textContent = $('n').value;
+  } catch (e) { $('who').innerHTML = `<b>${esc(S?.email || '')}</b>`; say('msg', e.message.includes('fetch') ? 'Studio is starting up. Try again in a minute.' : e.message, 'err'); }
+  ready();
+}
+const ready = () => $('go').disabled = !(file && ME?.active && ME.shorts_left > 0);
+const pick = f => { if (!f) return; if (!/^video\//.test(f.type) && !/\.(mkv|mov|mp4|webm|m4v|avi)$/i.test(f.name)) return say('msg', 'That isn\'t a video file.', 'err');
+  file = f; $('fn').textContent = f.name + ' · ' + (f.size / 2 ** 20).toFixed(0) + ' MB'; say('msg', ''); ready(); };
+$('drop').onclick = () => $('fi').click(); $('drop').onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('fi').click(); } };
+$('fi').onchange = () => pick($('fi').files[0]);
+['dragenter', 'dragover'].forEach(t => $('drop').addEventListener(t, e => { e.preventDefault(); $('drop').classList.add('on'); }));
+['dragleave', 'drop'].forEach(t => $('drop').addEventListener(t, e => { e.preventDefault(); $('drop').classList.remove('on'); }));
+$('drop').addEventListener('drop', e => pick(e.dataTransfer.files[0]));
+$('n').oninput = () => $('nv').textContent = $('n').value;
+
+$('go').onclick = async () => {
+  const t = await token(); if (!t || !file) return;
+  $('go').disabled = true; $('bar').style.display = 'block'; $('bi').style.width = '0'; say('msg', 'Uploading…');
+  const fd = new FormData(); fd.append('file', file); fd.append('n', $('n').value);
+  const x = new XMLHttpRequest();  // XHR, not fetch: it reports upload progress
+  x.open('POST', CFG.api + '/jobs'); x.setRequestHeader('Authorization', 'Bearer ' + t);
+  x.upload.onprogress = e => { if (e.lengthComputable) { const p = Math.round(e.loaded / e.total * 100); $('bi').style.width = p + '%'; say('msg', p < 100 ? `Uploading… ${p}%` : 'Checking the video…'); } };
+  x.onload = () => {
+    let d = {}; try { d = JSON.parse(x.responseText); } catch (e) {}
+    $('bar').style.display = 'none';
+    if (x.status >= 400) { say('msg', d.detail || 'Upload failed.', 'err'); return ready(); }
+    say('msg', `Uploaded. Making ${d.n} Shorts, usually 5–15 minutes. You can leave this page open or come back later.`, 'ok');
+    file = null; $('fi').value = ''; $('fn').textContent = 'No video chosen'; ready(); loadJobs(); loadMe();
+  };
+  x.onerror = () => { $('bar').style.display = 'none'; say('msg', 'Upload failed. Check your connection and try again.', 'err'); ready(); };
+  x.send(fd);
+};
+
+// ---- jobs
+let poll = null;
+const ago = t => { const s = Date.now() / 1000 - t; return s < 90 ? 'just now' : s < 3600 ? Math.round(s / 60) + ' min ago' : s < 86400 ? Math.round(s / 3600) + ' h ago' : new Date(t * 1000).toLocaleDateString(); };
+async function loadJobs() {
+  let js; try { js = await api('/jobs'); } catch (e) { return; }
+  const open = new Set([...document.querySelectorAll('.job[data-done]')].map(x => x.dataset.id));
+  $('jobs').innerHTML = js.length ? js.map(j => {
+    const st = j.status === 'done' ? `<span class="pill done">✓ ${j.shorts.length} Shorts</span>` : j.status === 'failed' ? '<span class="pill failed">Failed</span>' : `<span class=pill><i class=spin></i>${esc(j.stage)}</span>`;
+    const grid = j.shorts.length ? `<div class=grid>${j.shorts.map(s => `<div class=short><video src="${CFG.api + s.url}" ${s.cover_url ? `poster="${CFG.api + s.cover_url}"` : ''} controls playsinline preload=none></video>
+      <div class=act><a class="btn" href="${CFG.api + s.url}&dl=1" download>Download</a>${s.post ? `<button class=btn data-post="${esc(s.post)}">Copy text</button>` : ''}</div></div>`).join('')}</div>` : '';
+    return `<div class="card job" data-id="${j.id}" ${j.status === 'done' ? 'data-done' : ''}><div class=jh><h3>${esc(j.name)}</h3>${st}<span class=when>${ago(j.created)}</span></div>${j.error && j.status === 'failed' ? `<div class=err-t>${esc(j.error)}</div>` : ''}${grid}</div>`;
+  }).join('') : '<div class=empty>Your Shorts will show up here.</div>';
+  clearTimeout(poll);
+  if (js.some(j => j.status === 'queued' || j.status === 'running')) poll = setTimeout(loadJobs, 6000);
+}
+$('jobs').onclick = e => { const b = e.target.closest('[data-post]'); if (!b) return; navigator.clipboard?.writeText(b.dataset.post); b.textContent = 'Copied'; setTimeout(() => b.textContent = 'Copy text', 1500); };
+
+function show() {
+  const inn = !!S; $('gate').hidden = inn; $('app').hidden = !inn; $('out').hidden = !inn;
+  if (inn) { loadMe(); loadJobs(); } else { $('who').textContent = ''; }
+}
+show();
+</script>
+</body>
+</html>
