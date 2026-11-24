@@ -16,19 +16,12 @@ ol{text-align:left;color:var(--m);display:grid;gap:8px;padding-left:22px;margin:
 <body><div class=box>
 <div class=ok>✓</div>
 <h1>You're in!</h1>
-<p>Your Vice.ai plan is active. Make Shorts right in your browser with nothing to install, or download the app.</p>
-<div class=dl><a class=btn href="/app/">Open Studio (online)</a><a class="btn alt" id=mac href="#">Download for Mac</a><a class="btn alt" id=win href="#">Download for Windows</a></div>
-<p style="margin-top:18px">Prefer the app? Sign in with the email and password you just used:</p>
+<p>Your Vice.ai plan is active. It runs right in your browser, on your computer or phone, with nothing to install.</p>
+<div class=dl style="grid-template-columns:1fr"><a class=btn href="/app/">Open Vice.ai</a></div>
 <ol>
-<li><b>Unzip</b> the download and open the Vice.ai folder.</li>
-<li><b>Run setup once:</b> on Mac, <code>bash setup.sh</code>; on Windows, right-click <code>setup.ps1</code> &gt; Run with PowerShell.</li>
-<li><b>Start Vice.ai</b> (<code>start.sh</code> or <code>start.bat</code>) and sign in. Your plan unlocks by itself.</li>
+<li><b>Type a Twitch streamer</b> on Home and press <b>Watch live</b>.</li>
+<li><b>When their chat explodes</b>, Vice.ai turns that moment into a Short within minutes. It keeps watching after you close the tab.</li>
+<li><b>Find your Shorts</b> in the Shorts tab, approve the ones you like, and post them (Connect Blotato to post automatically).</li>
 </ol>
 </div>
-<script>
-// Set these to where you host the downloads (e.g. GitHub Releases or your storage bucket).
-const LATEST = "https://tsgqmbjmgwpjxcyrbmds.supabase.co/storage/v1/object/public/releases/vice-ai-latest.zip";  // python release.py uploads it
-const DOWNLOADS = { mac: LATEST, win: LATEST };
-document.getElementById('mac').href = DOWNLOADS.mac; document.getElementById('win').href = DOWNLOADS.win;
-</script>
 </body></html>
