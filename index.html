@@ -254,7 +254,6 @@ $('dx').onclick = () => $('auth').close();
 $('asw').onclick = e => { e.preventDefault(); setMode(mode === 'up' ? 'in' : 'up'); };
 $('afp').onclick = async e => { e.preventDefault(); if (!$('ae').value) return say('Type your email first.', 'err'); const [rc, rd] = await auth('recover?redirect_to=' + BACK, { email: $('ae').value.trim() }); if (rc === 429) return say(rd.msg || 'Please wait a minute before asking for another link.', 'err'); say('If that email has an account, we sent a reset link.', 'ok'); };
 $('drop').onsubmit = e => { e.preventDefault(); location.hash = '#pricing'; };
-const API = "https://kiermedia2025--viceai-online-web.us-east.modal.run";  // Vice.ai Online (plan status)
 function choosePlan() {
   $('af').hidden = true; $('asw').parentElement.style.display = 'none'; $('apl').hidden = false;
   $('ah').textContent = 'Choose your plan'; $('ap').textContent = 'Your account is ready. Pick a plan to start making Shorts.'; say('');
@@ -265,7 +264,7 @@ async function afterAuth() {
   if (plan) return checkout();
   say('Signed in…', 'ok');
   let me = null;
-  try { me = await fetch(API + '/me', { headers: { Authorization: 'Bearer ' + session.access_token } }).then(r => r.ok ? r.json() : null); } catch (e) {}
+  try { me = await fetch(CFG.supabase + '/functions/v1/account', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + session.access_token }, body: '{"task":"license"}' }).then(r => r.ok ? r.json() : null); } catch (e) {}
   if (me && me.active) { say('You already have a plan. Opening Studio…', 'ok'); return setTimeout(() => location.href = '/studio.html', 900); }
   choosePlan();
 }
