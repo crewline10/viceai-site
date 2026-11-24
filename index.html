@@ -261,6 +261,7 @@ function choosePlan() {
 }
 document.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => { plan = b.dataset.pick; document.querySelectorAll('[data-pick]').forEach(x => x.disabled = true); checkout().finally(() => document.querySelectorAll('[data-pick]').forEach(x => x.disabled = false)); });
 async function afterAuth() {
+  try { if (session.refresh_token) localStorage.setItem('vice_s', JSON.stringify({ access_token: session.access_token, refresh_token: session.refresh_token, exp: Date.now() / 1000 + (session.expires_in || 3600) - 60, email: session.user?.email })); } catch (e) {}  // Studio opens signed in
   if (plan) return checkout();
   say('Signed in…', 'ok');
   let me = null;

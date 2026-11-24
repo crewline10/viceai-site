@@ -74,25 +74,12 @@ h2{font-size:22px;margin:36px 0 14px}
     <p style="margin-top:14px;font-size:14px">No account yet? <a href="/#pricing">Pick a plan</a> · <a href="/#signin">Forgot password?</a></p>
   </section>
 
-  <section id=app hidden>
-    <div class="card hero">
-      <h1>Turn a video into Shorts</h1>
-      <p>Upload a stream or gameplay video. Vice.ai finds the best moments and makes finished 9:16 Shorts with captions and a hook. Nothing to install.</p>
-      <div class=drop id=drop tabindex=0 role=button aria-label="Choose a video">
-        <div class=ic><svg viewBox="0 0 24 24"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg></div>
-        <b>Drop a video here or click to choose</b><span id=lim>MP4, MOV, MKV or WEBM</span>
-        <input type=file id=fi accept="video/*,.mkv" hidden>
-      </div>
-      <div class=row>
-        <div class=file id=fn>No video chosen</div>
-        <label>Shorts <input type=range id=n min=1 max=10 value=5><b id=nv>5</b></label>
-        <button class="btn p" id=go disabled>Make Shorts</button>
-      </div>
-      <div class=bar id=bar><i id=bi></i></div>
-      <div class=msg id=msg></div>
-    </div>
-    <h2>Your videos</h2>
-    <div id=jobs><div class=empty>Your Shorts will show up here.</div></div>
+  <section class="card gate" id=app hidden>
+    <h1 id=lt>Opening your Vice.ai…</h1>
+    <p id=ls>Starting your own copy of the app. This takes a few seconds the first time.</p>
+    <div class=bar style="display:block"><i id=lb style="width:8%"></i></div>
+    <div class=msg id=lm></div>
+    <p style="margin-top:14px;font-size:14px" id=lx hidden><button class="btn p" id=lr>Try again</button></p>
   </section>
 </main>
 
@@ -100,13 +87,10 @@ h2{font-size:22px;margin:36px 0 14px}
 const CFG = {
   supabase: "https://tsgqmbjmgwpjxcyrbmds.supabase.co",
   key: "sb_publishable_ZU-yY6eHL5lPpO8CoTiu8Q_HQRg4wdS",
-  api: "https://kiermedia2025--viceai-online-web.us-east.modal.run",   // the Vice.ai Online server (online/modal_app.py on Modal)
+  gate: "https://kiermedia2025--viceai-online-appgw.us-east.modal.run",   // each customer's own Vice.ai app (online/modal_app.py appgw)
 };
 const $ = id => document.getElementById(id);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const say = (el, t, k) => { $(el).textContent = t || ''; $(el).className = 'msg' + (k ? ' ' + k : ''); };
-
-// ---- session (Supabase Auth), kept in this browser so a refresh doesn't sign you out
 let S = null;
 try { S = JSON.parse(localStorage.getItem('vice_s') || 'null'); } catch (e) {}
 const keep = d => { S = d ? { access_token: d.access_token, refresh_token: d.refresh_token, exp: Date.now() / 1000 + (d.expires_in || 3600) - 60, email: d.user?.email || S?.email } : null;
@@ -119,18 +103,9 @@ async function token() {
   if (!S) return null;
   if (Date.now() / 1000 < S.exp) return S.access_token;
   const [c, d] = await authPost('token?grant_type=refresh_token', { refresh_token: S.refresh_token });
-  if (c >= 400 || !d.access_token) { keep(null); show(); return null; }
+  if (c >= 400 || !d.access_token) { keep(null); return null; }
   keep(d); return S.access_token;
 }
-async function api(path, opt = {}) {
-  const t = await token(); if (!t) throw new Error('Please sign in.');
-  const r = await fetch(CFG.api + path, { ...opt, headers: { ...(opt.headers || {}), Authorization: 'Bearer ' + t } });
-  const d = await r.json().catch(() => ({}));
-  if (r.status === 401) { keep(null); show(); }
-  if (!r.ok) throw new Error(d.detail || d.error || 'Something went wrong (' + r.status + ').');
-  return d;
-}
-
 $('gf').onsubmit = async e => {
   e.preventDefault(); $('gb').disabled = true; say('gm', 'Signing in…');
   const [c, d] = await authPost('token?grant_type=password', { email: $('ge').value.trim(), password: $('gp').value });
@@ -139,67 +114,27 @@ $('gf').onsubmit = async e => {
   keep(d); show();
 };
 $('out').onclick = () => { keep(null); show(); };
-
-// ---- plan + upload
-let ME = null, file = null;
-async function loadMe() {
+$('lr').onclick = () => launch();
+let tick = null;
+async function launch() {
+  $('lx').hidden = true; say('lm', ''); $('lt').textContent = 'Opening your Vice.ai…';
+  let w = 8; clearInterval(tick); tick = setInterval(() => { w = Math.min(92, w + (92 - w) * 0.06); $('lb').style.width = w + '%'; }, 400);
+  const t = await token(); if (!t) { clearInterval(tick); return show(); }
   try {
-    ME = await api('/me');
-    $('who').innerHTML = ME.active ? `<b>${esc(ME.email)}</b><br>${esc(ME.plan[0].toUpperCase() + ME.plan.slice(1))} · ${ME.shorts_left} Shorts left this month` : `<b>${esc(ME.email)}</b><br>No active plan`;
-    if (!ME.active) say('msg', 'You need a plan to make Shorts. ', 'err'), $('msg').insertAdjacentHTML('beforeend', '<a href="/#pricing">Pick a plan</a>');
-    $('lim').textContent = `MP4, MOV, MKV or WEBM · up to ${ME.max_gb || 2} GB and ${(ME.max_minutes || 180) / 60} hours`;
-    $('n').max = Math.max(1, Math.min(ME.max_n || 10, ME.shorts_left || 1)); if (+$('n').value > +$('n').max) $('n').value = $('n').max; $('nv').textContent = $('n').value;
-  } catch (e) { $('who').innerHTML = `<b>${esc(S?.email || '')}</b>`; say('msg', e.message.includes('fetch') ? 'Studio is starting up. Try again in a minute.' : e.message, 'err'); }
-  ready();
+    const r = await fetch(CFG.gate + '/session', { method: 'POST', headers: { Authorization: 'Bearer ' + t } });
+    const d = await r.json().catch(() => ({}));
+    if (r.status === 401) { keep(null); clearInterval(tick); return show(); }
+    if (r.status === 402) { clearInterval(tick); $('lt').textContent = 'Choose a plan to start'; $('ls').innerHTML = 'Your account doesn\'t have a plan yet. <a href="/#pricing">See plans</a>'; return; }
+    if (!r.ok || !d.url) throw new Error(d.detail || 'Vice.ai didn\'t start.');
+    $('lb').style.width = '100%'; location.href = CFG.gate + d.url;
+  } catch (e) {
+    clearInterval(tick); say('lm', (e.message || '').includes('fetch') ? 'Couldn\'t reach Vice.ai. Check your connection.' : e.message, 'err'); $('lx').hidden = false;
+  }
 }
-const ready = () => $('go').disabled = !(file && ME?.active && ME.shorts_left > 0);
-const pick = f => { if (!f) return; if (!/^video\//.test(f.type) && !/\.(mkv|mov|mp4|webm|m4v|avi)$/i.test(f.name)) return say('msg', 'That isn\'t a video file.', 'err');
-  file = f; $('fn').textContent = f.name + ' · ' + (f.size / 2 ** 20).toFixed(0) + ' MB'; say('msg', ''); ready(); };
-$('drop').onclick = () => $('fi').click(); $('drop').onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('fi').click(); } };
-$('fi').onchange = () => pick($('fi').files[0]);
-['dragenter', 'dragover'].forEach(t => $('drop').addEventListener(t, e => { e.preventDefault(); $('drop').classList.add('on'); }));
-['dragleave', 'drop'].forEach(t => $('drop').addEventListener(t, e => { e.preventDefault(); $('drop').classList.remove('on'); }));
-$('drop').addEventListener('drop', e => pick(e.dataTransfer.files[0]));
-$('n').oninput = () => $('nv').textContent = $('n').value;
-
-$('go').onclick = async () => {
-  const t = await token(); if (!t || !file) return;
-  $('go').disabled = true; $('bar').style.display = 'block'; $('bi').style.width = '0'; say('msg', 'Uploading…');
-  const fd = new FormData(); fd.append('file', file); fd.append('n', $('n').value);
-  const x = new XMLHttpRequest();  // XHR, not fetch: it reports upload progress
-  x.open('POST', CFG.api + '/jobs'); x.setRequestHeader('Authorization', 'Bearer ' + t);
-  x.upload.onprogress = e => { if (e.lengthComputable) { const p = Math.round(e.loaded / e.total * 100); $('bi').style.width = p + '%'; say('msg', p < 100 ? `Uploading… ${p}%` : 'Checking the video…'); } };
-  x.onload = () => {
-    let d = {}; try { d = JSON.parse(x.responseText); } catch (e) {}
-    $('bar').style.display = 'none';
-    if (x.status >= 400) { say('msg', d.detail || 'Upload failed.', 'err'); return ready(); }
-    say('msg', `Uploaded. Making ${d.n} Shorts, usually 5–15 minutes. You can leave this page open or come back later.`, 'ok');
-    file = null; $('fi').value = ''; $('fn').textContent = 'No video chosen'; ready(); loadJobs(); loadMe();
-  };
-  x.onerror = () => { $('bar').style.display = 'none'; say('msg', 'Upload failed. Check your connection and try again.', 'err'); ready(); };
-  x.send(fd);
-};
-
-// ---- jobs
-let poll = null;
-const ago = t => { const s = Date.now() / 1000 - t; return s < 90 ? 'just now' : s < 3600 ? Math.round(s / 60) + ' min ago' : s < 86400 ? Math.round(s / 3600) + ' h ago' : new Date(t * 1000).toLocaleDateString(); };
-async function loadJobs() {
-  let js; try { js = await api('/jobs'); } catch (e) { return; }
-  const open = new Set([...document.querySelectorAll('.job[data-done]')].map(x => x.dataset.id));
-  $('jobs').innerHTML = js.length ? js.map(j => {
-    const st = j.status === 'done' ? `<span class="pill done">✓ ${j.shorts.length} Shorts</span>` : j.status === 'failed' ? '<span class="pill failed">Failed</span>' : `<span class=pill><i class=spin></i>${esc(j.stage)}</span>`;
-    const grid = j.shorts.length ? `<div class=grid>${j.shorts.map(s => `<div class=short><video src="${CFG.api + s.url}" ${s.cover_url ? `poster="${CFG.api + s.cover_url}"` : ''} controls playsinline preload=none></video>
-      <div class=act><a class="btn" href="${CFG.api + s.url}&dl=1" download>Download</a>${s.post ? `<button class=btn data-post="${esc(s.post)}">Copy text</button>` : ''}</div></div>`).join('')}</div>` : '';
-    return `<div class="card job" data-id="${j.id}" ${j.status === 'done' ? 'data-done' : ''}><div class=jh><h3>${esc(j.name)}</h3>${st}<span class=when>${ago(j.created)}</span></div>${j.error && j.status === 'failed' ? `<div class=err-t>${esc(j.error)}</div>` : ''}${grid}</div>`;
-  }).join('') : '<div class=empty>Your Shorts will show up here.</div>';
-  clearTimeout(poll);
-  if (js.some(j => j.status === 'queued' || j.status === 'running')) poll = setTimeout(loadJobs, 6000);
-}
-$('jobs').onclick = e => { const b = e.target.closest('[data-post]'); if (!b) return; navigator.clipboard?.writeText(b.dataset.post); b.textContent = 'Copied'; setTimeout(() => b.textContent = 'Copy text', 1500); };
-
 function show() {
   const inn = !!S; $('gate').hidden = inn; $('app').hidden = !inn; $('out').hidden = !inn;
-  if (inn) { loadMe(); loadJobs(); } else { $('who').textContent = ''; }
+  $('who').innerHTML = inn ? '<b>' + (S.email || '').replace(/[<>&]/g, '') + '</b>' : '';
+  if (inn) launch();
 }
 show();
 </script>
