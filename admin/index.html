@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Vice.ai Owner Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#04060a; --panel:rgba(8,18,28,.62); --line:rgba(63,240,255,.22); --line2:rgba(63,240,255,.55);
+  --cy:#3ff0ff; --cy2:#9ffbff; --red:#ff2d3f; --gold:#ffb52e; --gold2:#ffd98a; --green:#5dffa8;
+  --tx:#d7f6ff; --mut:#6f9aa8; --glow:0 0 12px rgba(63,240,255,.55);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--tx);font-family:Rajdhani,system-ui,sans-serif;font-size:16px;min-height:100vh}
+body{overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 30%,rgba(63,240,255,.10),transparent 70%),
+    radial-gradient(ellipse 50% 40% at 85% 100%,rgba(255,45,63,.10),transparent 70%),
+    radial-gradient(ellipse 40% 40% at 0% 100%,rgba(255,181,46,.07),transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='97'%3E%3Cpath d='M28 0L56 16v32L28 64 0 48V16zM28 64v33' fill='none' stroke='%233ff0ff' stroke-opacity='.07'/%3E%3C/svg%3E");}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+.sweep{position:fixed;left:0;right:0;height:140px;top:-140px;pointer-events:none;z-index:49;
+  background:linear-gradient(180deg,transparent,rgba(63,240,255,.05),transparent);animation:sweep 7s linear infinite}
+@keyframes sweep{to{top:110vh}}
+.wrap{position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:18px 16px 40px}
+.orb{font-family:Orbitron,sans-serif;letter-spacing:.14em;text-transform:uppercase}
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 14px;border:1px solid var(--line);
+  background:linear-gradient(90deg,rgba(255,45,63,.10),rgba(8,18,28,.6) 30%,rgba(8,18,28,.6) 70%,rgba(255,181,46,.10));
+  clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
+.logo{width:34px;height:34px;flex:none}
+.brand{font-size:15px;font-weight:900;color:var(--gold2);text-shadow:0 0 10px rgba(255,181,46,.6)}
+.brand small{display:block;font-size:10px;color:var(--cy);font-weight:500;letter-spacing:.3em;text-shadow:var(--glow)}
+.hs{margin-left:auto;display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--mut)}
+.hs b{color:var(--cy);font-weight:600}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);margin-right:6px;animation:blink 1.6s infinite}
+.dot.warn{background:var(--gold);box-shadow:0 0 8px var(--gold)}.dot.bad{background:var(--red);box-shadow:0 0 8px var(--red)}
+@keyframes blink{50%{opacity:.35}}
+button,.btn{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;
+  color:var(--cy);background:rgba(63,240,255,.06);border:1px solid var(--line2);padding:8px 14px;transition:.2s}
+button:hover{background:rgba(63,240,255,.16);box-shadow:var(--glow)}
+button.gold{color:var(--gold2);border-color:rgba(255,181,46,.6);background:rgba(255,181,46,.08)}
+button:disabled{opacity:.5;cursor:wait}
+.grid{display:grid;gap:14px;margin-top:14px;grid-template-columns:repeat(12,1fr)}
+.p{position:relative;background:var(--panel);border:1px solid var(--line);padding:16px 16px 14px;backdrop-filter:blur(4px);min-width:0;
+  clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px))}
+.p:before,.p:after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--cy);opacity:.8}
+.p:before{left:-1px;top:-1px;border-right:0;border-bottom:0}
+.p:after{right:-1px;bottom:-1px;border-left:0;border-top:0}
+.p h2{font-family:Orbitron,sans-serif;font-size:11px;font-weight:700;letter-spacing:.26em;color:var(--cy);text-transform:uppercase;
+  display:flex;align-items:center;gap:8px;margin-bottom:12px;text-shadow:var(--glow)}
+.p h2:before{content:"";width:6px;height:6px;background:var(--red);box-shadow:0 0 8px var(--red);transform:rotate(45deg)}
+.p h2 i{flex:1;height:1px;background:linear-gradient(90deg,var(--line2),transparent)}
+.p h2 em{font-style:normal;color:var(--mut);font-weight:500;letter-spacing:.12em}
+.c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}.c12{grid-column:span 12}
+@media(max-width:1060px){.c3{grid-column:span 6}.c4,.c5,.c7,.c8{grid-column:span 12}.c6{grid-column:span 12}}
+@media(max-width:560px){.c3{grid-column:span 12}.hs{margin-left:0}}
+.kpi .v{font-family:Orbitron,sans-serif;font-size:28px;font-weight:700;color:var(--tx);text-shadow:0 0 14px rgba(63,240,255,.45);white-space:nowrap}
+.kpi .v.gold{color:var(--gold2);text-shadow:0 0 14px rgba(255,181,46,.5)}
+.kpi .v.red{color:#ff8c96;text-shadow:0 0 14px rgba(255,45,63,.55)}
+.kpi .s{font-size:13px;color:var(--mut);margin-top:4px}
+.kpi .s b{color:var(--cy2);font-weight:600}
+/* reactor */
+.reactor{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.reactor svg{width:100%;max-width:330px;height:auto;overflow:visible}
+.spin{transform-origin:200px 200px;animation:rot 26s linear infinite}.spin.r{animation-direction:reverse;animation-duration:40s}.spin.f{animation-duration:9s}
+@keyframes rot{to{transform:rotate(360deg)}}
+.legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;font-size:13px;color:var(--mut)}
+.legend span:before{content:"";display:inline-block;width:10px;height:3px;margin-right:6px;vertical-align:middle;background:currentColor;box-shadow:0 0 6px currentColor}
+/* rows */
+.row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;padding:7px 0;border-bottom:1px dashed rgba(63,240,255,.12);font-size:15px}
+.row:last-child{border-bottom:0}
+.row .n{color:var(--mut)}.row .n b{color:var(--tx);font-weight:600}
+.row .a{font-family:Orbitron,sans-serif;font-size:14px}
+.row .bar{grid-column:1/-1;height:4px;background:rgba(63,240,255,.08);position:relative;overflow:hidden}
+.row .bar i{position:absolute;inset:0 auto 0 0;width:0;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.tot{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;padding-top:10px;border-top:1px solid var(--line2)}
+.tot .orb{font-size:11px;color:var(--mut)}
+.tot .a{font-family:Orbitron,sans-serif;font-size:20px;font-weight:700}
+.edit{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--mut)}
+.edit input{width:90px;background:rgba(0,0,0,.4);border:1px solid var(--line2);color:var(--gold2);font-family:Orbitron,sans-serif;font-size:13px;padding:7px 8px;outline:none}
+.edit input:focus{box-shadow:var(--glow)}
+.note{font-size:12.5px;color:var(--mut);margin-top:8px;line-height:1.35}
+.note.warn{color:var(--gold)}
+.gauges{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.g{text-align:center}.g svg{width:100%;max-width:130px;height:auto}
+.g .l{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:.2em;margin-top:2px}
+.g .m{font-size:13px;color:var(--mut)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:.2em;color:var(--mut);text-align:left;font-weight:500;padding:6px 8px;border-bottom:1px solid var(--line2)}
+td{padding:7px 8px;border-bottom:1px dashed rgba(63,240,255,.1);vertical-align:middle}
+td.r,th.r{text-align:right}
+.scroll{overflow-x:auto;max-height:420px;overflow-y:auto}
+.tag{font-family:Orbitron,sans-serif;font-size:9.5px;letter-spacing:.15em;padding:2px 6px;border:1px solid currentColor;text-transform:uppercase}
+.t-starter{color:var(--cy)}.t-pro{color:var(--gold)}.t-studio{color:var(--red)}.t-owner{color:var(--green)}
+.mb{height:6px;background:rgba(63,240,255,.08);min-width:110px;position:relative}
+.mb i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--cy),var(--gold));box-shadow:0 0 8px rgba(63,240,255,.6)}
+.mb i.hot{background:linear-gradient(90deg,var(--gold),var(--red))}
+.chart svg{width:100%;height:auto;display:block}
+.chart text{font-family:Rajdhani,sans-serif;fill:var(--mut);font-size:12px}
+.stat3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.stat3 div{border:1px solid var(--line);padding:8px 10px;background:rgba(63,240,255,.03)}
+.stat3 .v{font-family:Orbitron,sans-serif;font-size:22px;font-weight:700}
+.stat3 .k{font-size:11px;letter-spacing:.18em;color:var(--mut);text-transform:uppercase}
+.err{color:#ff8c96}
+/* gate */
+.gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;position:relative;z-index:1}
+.gate .p{width:100%;max-width:420px;padding:30px 26px}
+.gate h1{font-family:Orbitron,sans-serif;font-size:18px;letter-spacing:.24em;color:var(--gold2);text-shadow:0 0 12px rgba(255,181,46,.6);margin:14px 0 4px;text-align:center}
+.gate p.sub{text-align:center;color:var(--mut);font-size:14px;margin-bottom:20px;letter-spacing:.06em}
+.gate label{display:block;font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:.22em;color:var(--cy);margin:12px 0 6px}
+.gate input{width:100%;background:rgba(0,0,0,.45);border:1px solid var(--line2);color:var(--tx);font:500 16px Rajdhani,sans-serif;padding:10px 12px;outline:none}
+.gate input:focus{box-shadow:var(--glow)}
+.gate button{width:100%;margin-top:20px;padding:12px}
+.gate .msg{min-height:20px;margin-top:12px;text-align:center;font-size:14px;color:var(--mut)}
+.gate .msg.err{color:#ff8c96}
+.denied h1{color:#ff8c96;text-shadow:0 0 14px rgba(255,45,63,.7)}
+.boot{font-family:Orbitron,sans-serif;font-size:12px;letter-spacing:.3em;color:var(--cy);text-shadow:var(--glow);text-align:center;margin-top:40vh}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="sweep"></div>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="gl" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <linearGradient id="gGold" x1="0" x2="1"><stop offset="0" stop-color="#ff2d3f"/><stop offset="1" stop-color="#ffb52e"/></linearGradient>
+    <linearGradient id="gCy" x1="0" x2="1"><stop offset="0" stop-color="#3ff0ff"/><stop offset="1" stop-color="#9ffbff"/></linearGradient>
+    <symbol id="mark" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="none" stroke="#3ff0ff" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="20" cy="20" r="11" fill="none" stroke="#ffb52e" stroke-width="2"/><path d="M20 11l7.8 13.5H12.2z" fill="none" stroke="#ff2d3f" stroke-width="1.6"/><circle cx="20" cy="20" r="3.4" fill="#9ffbff"/></symbol>
+  </defs>
+</svg>
+
+<!-- sign in -->
+<section class="gate" id="gate" hidden>
+  <div class="p">
+    <svg class="logo" style="display:block;margin:0 auto;width:64px;height:64px"><use href="#mark"/></svg>
+    <h1>OWNER CONSOLE</h1>
+    <p class="sub">Vice.ai command systems. Identify yourself.</p>
+    <form id="gf">
+      <label for="ge">Email</label><input id="ge" type="email" autocomplete="username" required>
+      <label for="gp">Password</label><input id="gp" type="password" autocomplete="current-password" required>
+      <button id="gb" type="submit">Authenticate</button>
+      <div class="msg" id="gm"></div>
+    </form>
+  </div>
+</section>
+
+<!-- refused -->
+<section class="gate denied" id="denied" hidden>
+  <div class="p" style="text-align:center">
+    <svg class="logo" style="display:block;margin:0 auto;width:64px;height:64px"><use href="#mark"/></svg>
+    <h1>ACCESS DENIED</h1>
+    <p class="sub" id="dm">This console is for the owner only.</p>
+    <button id="dout">Sign out</button>
+  </div>
+</section>
+
+<div class="boot orb" id="boot">Initializing systems…</div>
+
+<!-- dashboard -->
+<div class="wrap" id="dash" hidden>
+  <header>
+    <svg class="logo"><use href="#mark"/></svg>
+    <div class="brand orb">Vice.ai<small>Owner console</small></div>
+    <div class="hs">
+      <span><i class="dot" id="sd"></i><span id="st">Systems online</span></span>
+      <span>Period <b id="hm">—</b></span>
+      <span>Synced <b id="ht">—</b></span>
+      <span id="who"></span>
+      <button id="rf">Refresh</button>
+      <button id="out">Sign out</button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <div class="p kpi c3"><h2>MRR<i></i></h2><div class="v gold" id="k-mrr">$0</div><div class="s" id="k-mrr-s">—</div></div>
+    <div class="p kpi c3"><h2>Revenue this month<i></i></h2><div class="v" id="k-rev">$0</div><div class="s" id="k-rev-s">—</div></div>
+    <div class="p kpi c3"><h2>Deductions<i></i></h2><div class="v red" id="k-cost">$0</div><div class="s" id="k-cost-s">—</div></div>
+    <div class="p kpi c3"><h2>Users<i></i></h2><div class="v" id="k-usr">0</div><div class="s" id="k-usr-s">—</div></div>
+
+    <div class="p c5 reactor">
+      <h2 style="align-self:stretch">Net profit · this month<i></i><em id="r-m"></em></h2>
+      <svg viewBox="0 0 400 400" id="reactor" aria-label="Net profit this month">
+        <g class="spin r"><circle cx="200" cy="200" r="190" fill="none" stroke="#3ff0ff" stroke-opacity=".25" stroke-width="1" stroke-dasharray="2 6"/></g>
+        <g class="spin"><circle cx="200" cy="200" r="178" fill="none" stroke="#3ff0ff" stroke-opacity=".5" stroke-width="2" stroke-dasharray="60 14 6 14"/></g>
+        <circle cx="200" cy="200" r="160" fill="none" stroke="rgba(63,240,255,.08)" stroke-width="16"/>
+        <circle id="r-rev" cx="200" cy="200" r="160" fill="none" stroke="url(#gCy)" stroke-width="16" stroke-linecap="butt" transform="rotate(-90 200 200)" stroke-dasharray="0 1006" filter="url(#gl)" style="transition:stroke-dasharray 1.6s cubic-bezier(.2,.8,.2,1)"/>
+        <circle cx="200" cy="200" r="136" fill="none" stroke="rgba(255,45,63,.08)" stroke-width="10"/>
+        <circle id="r-cost" cx="200" cy="200" r="136" fill="none" stroke="url(#gGold)" stroke-width="10" transform="rotate(-90 200 200)" stroke-dasharray="0 855" filter="url(#gl)" style="transition:stroke-dasharray 1.6s cubic-bezier(.2,.8,.2,1)"/>
+        <g class="spin f"><circle cx="200" cy="200" r="118" fill="none" stroke="#ffb52e" stroke-opacity=".55" stroke-width="1.5" stroke-dasharray="3 9"/></g>
+        <g id="ticks"></g>
+        <circle cx="200" cy="200" r="98" fill="rgba(4,10,16,.85)" stroke="rgba(63,240,255,.35)"/>
+        <circle cx="200" cy="200" r="98" fill="url(#core)" opacity=".5"/>
+        <radialGradient id="core"><stop offset="0" stop-color="#3ff0ff" stop-opacity=".35"/><stop offset="1" stop-color="#3ff0ff" stop-opacity="0"/></radialGradient>
+        <text x="200" y="168" text-anchor="middle" font-family="Orbitron" font-size="11" letter-spacing="3" fill="#6f9aa8">NET PROFIT</text>
+        <text id="r-net" x="200" y="212" text-anchor="middle" font-family="Orbitron" font-weight="900" font-size="36" fill="#d7f6ff" filter="url(#gl)">$0</text>
+        <text id="r-mg" x="200" y="240" text-anchor="middle" font-family="Orbitron" font-size="12" letter-spacing="2" fill="#ffb52e">MARGIN —</text>
+      </svg>
+      <div class="legend"><span style="color:var(--cy)">Kept after refunds</span><span style="color:var(--gold)">Deductions</span></div>
+    </div>
+
+    <div class="p c7">
+      <h2>Profit over time<i></i><em>last 6 months</em></h2>
+      <div class="chart" id="chart"></div>
+      <div class="legend" style="margin-top:6px"><span style="color:var(--cy)">Revenue</span><span style="color:var(--red)">Costs</span><span style="color:var(--gold)">Net profit</span></div>
+    </div>
+
+    <div class="p c6">
+      <h2>Revenue · Stripe live<i></i><em id="sl"></em></h2>
+      <div class="gauges" id="gauges"></div>
+      <div id="revrows" style="margin-top:12px"></div>
+      <div class="note err" id="serr" hidden></div>
+    </div>
+
+    <div class="p c6">
+      <h2>Deductions · this month<i></i></h2>
+      <div id="costrows"></div>
+      <div class="tot"><span class="orb">Total</span><span class="a" id="ctot" style="color:#ff8c96">$0</span></div>
+      <div class="edit">
+        <span>Modal used in <b id="em" style="color:var(--tx)"></b> $</span><input id="mi" type="number" min="0" step="0.01" placeholder="0.00">
+        <span>Supabase $/mo</span><input id="si" type="number" min="0" step="1">
+        <span>AI $/pick</span><input id="ai" type="number" min="0" step="0.001">
+        <button class="gold" id="save">Save</button>
+      </div>
+      <div class="note" id="mnote">Modal has no read key here, so type its usage from modal.com/settings/usage. The $30 monthly free credit is taken off before it counts as a cost.</div>
+    </div>
+
+    <div class="p c5">
+      <h2>Users &amp; licenses<i></i></h2>
+      <div class="stat3">
+        <div><div class="k">Sign-ups</div><div class="v" id="u-tot">0</div></div>
+        <div><div class="k">New this month</div><div class="v" id="u-new" style="color:var(--gold2)">0</div></div>
+        <div><div class="k">Signed in 7d</div><div class="v" id="u-7d" style="color:var(--cy)">0</div></div>
+      </div>
+      <div class="chart" id="spark"></div>
+      <div id="licrows" style="margin-top:8px"></div>
+      <div class="note err" id="uerr" hidden></div>
+    </div>
+
+    <div class="p c7">
+      <h2>Usage · minutes this month<i></i><em id="u-sum"></em></h2>
+      <div class="scroll"><table><thead><tr><th>Account</th><th>Plan</th><th>Minutes used</th><th class="r">Used</th><th class="r">Shorts</th></tr></thead><tbody id="usage"></tbody></table></div>
+    </div>
+
+    <div class="p c12">
+      <h2>Recent payments<i></i></h2>
+      <div class="scroll"><table><thead><tr><th>When</th><th>Customer</th><th class="r">Amount</th><th class="r">Refunded</th></tr></thead><tbody id="pays"></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CFG = {
+  supabase: "https://tsgqmbjmgwpjxcyrbmds.supabase.co",
+  key: "sb_publishable_ZU-yY6eHL5lPpO8CoTiu8Q_HQRg4wdS",   // public key; all data comes from the owner-stats function, which checks the owner
+};
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
+const usd = (x, d) => (x < 0 ? '-$' : '$') + Math.abs(x).toLocaleString('en-US', { minimumFractionDigits: d ?? 2, maximumFractionDigits: d ?? 2 });
+const MON = m => new Date(m + '-01T00:00:00Z').toLocaleString('en-US', { month: 'short', timeZone: 'UTC' });
+
+// same session storage as /app, so signing in there also signs you in here
+let S = null;
+try { S = JSON.parse(localStorage.getItem('vice_s') || 'null'); } catch (e) {}
+const keep = d => { S = d ? { access_token: d.access_token, refresh_token: d.refresh_token, exp: Date.now() / 1000 + (d.expires_in || 3600) - 60, email: d.user?.email || S?.email } : null;
+  try { d ? localStorage.setItem('vice_s', JSON.stringify(S)) : localStorage.removeItem('vice_s'); } catch (e) {} };
+async function authPost(path, body) {
+  const r = await fetch(CFG.supabase + '/auth/v1/' + path, { method: 'POST', headers: { apikey: CFG.key, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  return [r.status, await r.json().catch(() => ({}))];
+}
+async function token() {
+  if (!S) return null;
+  if (Date.now() / 1000 < S.exp) return S.access_token;
+  const [c, d] = await authPost('token?grant_type=refresh_token', { refresh_token: S.refresh_token });
+  if (c >= 400 || !d.access_token) { keep(null); return null; }
+  keep(d); return S.access_token;
+}
+async function call(body) {
+  const t = await token(); if (!t) return [401, {}];
+  const r = await fetch(CFG.supabase + '/functions/v1/owner-stats', { method: 'POST', headers: { Authorization: 'Bearer ' + t, apikey: CFG.key, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  return [r.status, await r.json().catch(() => ({}))];
+}
+function view(v) { for (const id of ['gate', 'denied', 'dash', 'boot']) $(id).hidden = id !== v; }
+
+$('gf').onsubmit = async e => {
+  e.preventDefault(); $('gb').disabled = true; $('gm').className = 'msg'; $('gm').textContent = 'Verifying…';
+  const [c, d] = await authPost('token?grant_type=password', { email: $('ge').value.trim(), password: $('gp').value });
+  $('gb').disabled = false; $('gp').value = '';
+  if (c >= 400 || !d.access_token) { $('gm').className = 'msg err'; $('gm').textContent = d.msg || d.error_description || 'Wrong email or password.'; return; }
+  keep(d); load();
+};
+$('out').onclick = $('dout').onclick = () => { keep(null); view('gate'); };
+$('rf').onclick = () => load(true);
+
+// animated numbers
+function count(el, to, fmt) {
+  el = typeof el === 'string' ? $(el) : el;
+  const from = Number(el.dataset.v || 0); el.dataset.v = to;
+  const t0 = performance.now(), dur = 1300;
+  const step = t => { const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = fmt(from + (to - from) * e); if (k < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+const fUsd0 = x => usd(x, 0), fUsd = x => usd(x), fInt = x => Math.round(x).toLocaleString('en-US');
+
+// reactor ticks
+(() => { let g = ''; for (let i = 0; i < 60; i++) { const a = i / 60 * Math.PI * 2, r1 = i % 5 ? 104 : 100, r2 = 110;
+  g += `<line x1="${200 + r1 * Math.cos(a)}" y1="${200 + r1 * Math.sin(a)}" x2="${200 + r2 * Math.cos(a)}" y2="${200 + r2 * Math.sin(a)}" stroke="${i % 5 ? 'rgba(63,240,255,.35)' : '#3ff0ff'}" stroke-width="${i % 5 ? 1 : 2}"/>`; }
+  $('ticks').innerHTML = g; })();
+
+function ring(pct, color, label, big, small) {
+  const r = 46, C = 2 * Math.PI * r, p = Math.max(0, Math.min(1, pct));
+  return `<div class="g"><svg viewBox="0 0 120 120">
+    <circle cx="60" cy="60" r="56" fill="none" stroke="${color}" stroke-opacity=".25" stroke-dasharray="2 5"/>
+    <circle cx="60" cy="60" r="${r}" fill="none" stroke="${color}" stroke-opacity=".1" stroke-width="9"/>
+    <circle class="arc" cx="60" cy="60" r="${r}" fill="none" stroke="${color}" stroke-width="9" transform="rotate(-90 60 60)"
+      stroke-dasharray="0 ${C}" data-d="${C * p} ${C}" filter="url(#gl)" style="transition:stroke-dasharray 1.4s cubic-bezier(.2,.8,.2,1)"/>
+    <text x="60" y="64" text-anchor="middle" font-family="Orbitron" font-weight="700" font-size="22" fill="#d7f6ff">${big}</text>
+    <text x="60" y="82" text-anchor="middle" font-family="Rajdhani" font-size="11" fill="#6f9aa8">${small}</text></svg>
+    <div class="l" style="color:${color}">${label}</div></div>`;
+}
+function row(name, amount, pct, color, cls) {
+  return `<div class="row"><span class="n">${name}</span><span class="a ${cls || ''}">${amount}</span>
+    <span class="bar"><i data-w="${Math.max(0, Math.min(100, pct * 100))}%" style="background:${color};box-shadow:0 0 8px ${color}"></i></span></div>`;
+}
+const grow = root => requestAnimationFrame(() => requestAnimationFrame(() => {
+  root.querySelectorAll('[data-w]').forEach(i => i.style.width = i.dataset.w);
+  root.querySelectorAll('.arc[data-d]').forEach(c => c.setAttribute('stroke-dasharray', c.dataset.d));
+}));
+
+function chart(profit) {
+  const W = 640, H = 240, L = 50, R = 10, T = 14, B = 26, n = profit.length;
+  const vals = profit.flatMap(p => [p.gross - p.refunds, p.costs, p.net]);
+  const max = Math.max(10, ...vals), min = Math.min(0, ...vals), span = max - min;
+  const y = v => T + (H - T - B) * (1 - (v - min) / span), bw = (W - L - R) / n;
+  let s = `<svg viewBox="0 0 ${W} ${H}">`;
+  for (let i = 0; i <= 4; i++) { const v = min + span * i / 4;
+    s += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(63,240,255,${i ? .08 : .2})"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${usd(v, 0)}</text>`; }
+  s += `<line x1="${L}" x2="${W - R}" y1="${y(0)}" y2="${y(0)}" stroke="rgba(63,240,255,.45)"/>`;
+  profit.forEach((p, i) => { const x = L + bw * i, w = bw * .28, kept = p.gross - p.refunds;
+    s += `<rect x="${x + bw * .18}" y="${y(Math.max(0, kept))}" width="${w}" height="${Math.abs(y(kept) - y(0))}" fill="url(#gCy)" opacity=".85"><title>${MON(p.month)} revenue ${usd(kept)}</title></rect>`;
+    s += `<rect x="${x + bw * .18 + w + 3}" y="${y(p.costs)}" width="${w}" height="${Math.abs(y(p.costs) - y(0))}" fill="#ff2d3f" opacity=".75"><title>${MON(p.month)} costs ${usd(p.costs)}</title></rect>`;
+    s += `<text x="${x + bw / 2}" y="${H - 6}" text-anchor="middle">${MON(p.month)}</text>`; });
+  const pts = profit.map((p, i) => `${L + bw * i + bw / 2},${y(p.net)}`).join(' ');
+  s += `<polyline points="${pts}" fill="none" stroke="#ffb52e" stroke-width="2.5" filter="url(#gl)"/>`;
+  profit.forEach((p, i) => s += `<circle cx="${L + bw * i + bw / 2}" cy="${y(p.net)}" r="4" fill="#04060a" stroke="#ffd98a" stroke-width="2"><title>${MON(p.month)} net ${usd(p.net)}</title></circle>`);
+  return s + '</svg>';
+}
+function spark(signups) {
+  const ks = Object.keys(signups), v = ks.map(k => signups[k]), max = Math.max(1, ...v), W = 400, H = 70, bw = W / ks.length;
+  let s = `<svg viewBox="0 0 ${W} ${H + 16}">`;
+  ks.forEach((k, i) => { const h = (H - 6) * v[i] / max;
+    s += `<rect x="${i * bw + bw * .22}" y="${H - h}" width="${bw * .56}" height="${Math.max(1, h)}" fill="url(#gCy)" opacity=".8"><title>${MON(k)}: ${v[i]} sign-ups</title></rect>
+      <text x="${i * bw + bw / 2}" y="${H + 13}" text-anchor="middle">${MON(k)} · ${v[i]}</text>`; });
+  return s + '</svg>';
+}
+
+let D = null;
+function render(d) {
+  D = d; const m = d.month, cur = d.profit.find(p => p.month === m) || d.profit[d.profit.length - 1];
+  const st = d.stripe, lic = d.licenses, us = d.users;
+  $('hm').textContent = MON(m) + ' ' + m.slice(0, 4);
+  $('ht').textContent = new Date(d.at).toLocaleTimeString();
+  $('who').innerHTML = '<b>' + esc(d.owner) + '</b>';
+  const errs = [d.stripe_error, d.users_error, d.licenses_error].filter(Boolean);
+  $('sd').className = 'dot' + (errs.length ? ' warn' : ''); $('st').textContent = errs.length ? 'Partial data' : 'Systems online';
+
+  // KPIs
+  count('k-mrr', st?.mrr ?? 0, fUsd0);
+  $('k-mrr-s').innerHTML = st ? `<b>${st.active}</b> active subs · <b>${st.past_due}</b> past due` : 'Stripe unavailable';
+  const kept = cur.gross - cur.refunds;
+  count('k-rev', kept, fUsd);
+  $('k-rev-s').innerHTML = `<b>${cur.payments}</b> payments · ${usd(cur.refunds)} refunded`;
+  count('k-cost', cur.costs, fUsd);
+  $('k-cost-s').innerHTML = `Fees, compute, AI, database`;
+  count('k-usr', us?.total ?? 0, fInt);
+  const active = lic ? Object.entries(lic.by_plan).reduce((a, [p, s]) => a + (p !== 'owner' ? (s.active || 0) + (s.trialing || 0) : 0), 0) : 0;
+  $('k-usr-s').innerHTML = `<b>${active}</b> paying licenses · <b>${st?.canceled_this_month ?? 0}</b> churned this month`;
+
+  // reactor
+  $('r-m').textContent = MON(m);
+  count($('r-net'), cur.net, fUsd0);
+  const base = Math.max(kept, cur.costs, 1);
+  $('r-rev').setAttribute('stroke-dasharray', `${1005.3 * Math.max(0, kept) / base} 1006`);
+  $('r-cost').setAttribute('stroke-dasharray', `${854.5 * cur.costs / base} 855`);
+  $('r-net').setAttribute('fill', cur.net >= 0 ? '#d7f6ff' : '#ff8c96');
+  $('r-mg').textContent = kept > 0 ? `MARGIN ${Math.round(cur.net / kept * 100)}%` : 'NO REVENUE YET';
+
+  $('chart').innerHTML = chart(d.profit);
+
+  // revenue
+  $('sl').textContent = st ? (st.livemode === false ? 'TEST MODE' : 'LIVE') : '';
+  const plans = st?.plans || {}, maxA = Math.max(1, ...Object.values(plans).map(p => p.active));
+  const col = { starter: '#3ff0ff', pro: '#ffb52e', studio: '#ff2d3f' };
+  $('gauges').innerHTML = ['starter', 'pro', 'studio'].map(p => ring((plans[p]?.active || 0) / maxA, col[p], p, plans[p]?.active || 0, usd(plans[p]?.mrr || 0, 0) + '/mo')).join('');
+  $('revrows').innerHTML =
+    row('Payments this month <b>(' + cur.payments + ')</b>', usd(cur.gross), 1, '#3ff0ff') +
+    row('Refunds', '-' + usd(cur.refunds), cur.gross ? cur.refunds / cur.gross : 0, '#ff2d3f', 'err') +
+    row('Kept after refunds', usd(kept), cur.gross ? kept / cur.gross : 0, '#ffb52e') +
+    row('Canceled subscriptions <b>(all time ' + (st?.canceled_total ?? 0) + ')</b>', String(st?.canceled_this_month ?? 0) + ' this mo', 0, '#ff2d3f');
+  $('serr').hidden = !d.stripe_error; $('serr').textContent = 'Stripe: ' + (d.stripe_error || '');
+
+  // costs
+  const cs = [['Stripe fees', cur.stripe_fees, '#3ff0ff'], ['Modal compute' + (cur.modal_used == null ? ' <b style="color:var(--gold)">(not entered)</b>' : ` <b>(${usd(cur.modal_used)} used)</b>`), cur.modal ?? 0, '#ffb52e'],
+    ['AI picks <b>(est.)</b>', cur.ai, '#ff2d3f'], ['Supabase', cur.supabase, '#9ffbff']];
+  const cmax = Math.max(1, ...cs.map(c => c[1]));
+  $('costrows').innerHTML = cs.map(c => row(c[0], usd(c[1]), c[1] / cmax, c[2])).join('');
+  count('ctot', cur.costs, fUsd);
+  $('em').textContent = MON(m);
+  if (document.activeElement !== $('mi')) $('mi').value = cur.modal_used ?? '';
+  if (document.activeElement !== $('si')) $('si').value = d.settings.supabase_fixed;
+  if (document.activeElement !== $('ai')) $('ai').value = d.settings.ai_per_pick;
+  $('mnote').className = 'note' + (cur.modal_used == null ? ' warn' : '');
+
+  // users
+  if (us) { count('u-tot', us.total, fInt); count('u-new', us.signups[m] || 0, fInt); count('u-7d', us.signed_in_7d, fInt); $('spark').innerHTML = spark(us.signups); }
+  const bp = lic?.by_plan || {};
+  $('licrows').innerHTML = ['starter', 'pro', 'studio', 'owner'].filter(p => bp[p] || p !== 'owner').map(p => {
+    const s = bp[p] || {}, a = (s.active || 0) + (s.trialing || 0), c = s.canceled || 0, other = Object.entries(s).filter(([k]) => !['active', 'trialing', 'canceled'].includes(k)).reduce((x, [, v]) => x + v, 0);
+    return row(`<span class="tag t-${p}">${p}</span> &nbsp;<b>${a}</b> active · ${c} churned${other ? ' · ' + other + ' other' : ''}`, a, a / Math.max(1, active), col[p] || '#5dffa8');
+  }).join('');
+  const ue = [d.users_error, d.licenses_error].filter(Boolean).join(' · ');
+  $('uerr').hidden = !ue; $('uerr').textContent = ue;
+
+  // usage
+  const u = lic?.usage || [];
+  const totMin = u.reduce((a, x) => a + x.minutes, 0);
+  $('u-sum').textContent = totMin.toLocaleString() + ' min total';
+  $('usage').innerHTML = u.length ? u.map(x => { const p = x.cap ? x.minutes / x.cap : 0;
+    return `<tr><td>${esc(x.email || '—')}</td><td><span class="tag t-${esc(x.plan)}">${esc(x.plan)}</span></td>
+      <td><div class="mb"><i data-w="${Math.min(100, p * 100)}%" class="${p > .85 ? 'hot' : ''}" style="width:0"></i></div></td>
+      <td class="r">${x.minutes.toLocaleString()}${x.plan === 'owner' ? '' : ' / ' + x.cap.toLocaleString()}</td><td class="r">${x.shorts}</td></tr>`; }).join('')
+    : '<tr><td colspan="5" style="color:var(--mut)">No usage yet this month.</td></tr>';
+
+  // payments
+  const rp = st?.recent || [];
+  $('pays').innerHTML = rp.length ? rp.map(p => `<tr><td>${new Date(p.at * 1000).toLocaleString()}</td><td>${esc(p.email || '—')}</td>
+      <td class="r" style="font-family:Orbitron;color:var(--gold2)">${usd(p.amount)} ${esc((p.currency || '').toUpperCase())}</td><td class="r ${p.refunded ? 'err' : ''}">${p.refunded ? usd(p.refunded) : '—'}</td></tr>`).join('')
+    : '<tr><td colspan="4" style="color:var(--mut)">No payments in the last 6 months.</td></tr>';
+
+  grow(document);
+}
+
+async function load(manual) {
+  if (!S) return view('gate');
+  if (!D) view('boot');
+  $('rf').disabled = true; $('sd').className = 'dot warn'; $('st').textContent = 'Syncing…';
+  try {
+    const [c, d] = await call({ task: 'stats' });
+    if (c === 401) { keep(null); return view('gate'); }
+    if (c === 403) { $('dm').textContent = (S.email || 'This account') + ' is not the owner.'; return view('denied'); }
+    if (c !== 200) throw new Error(d.error || 'HTTP ' + c);
+    view('dash'); render(d);
+  } catch (e) {
+    if (!D) { view('gate'); $('gm').className = 'msg err'; $('gm').textContent = 'Couldn\'t load: ' + (e.message || e); }
+    else { $('sd').className = 'dot bad'; $('st').textContent = 'Sync failed'; }
+  } finally { $('rf').disabled = false; }
+}
+
+$('save').onclick = async () => {
+  if (!D) return;
+  $('save').disabled = true;
+  const body = { task: 'settings', supabase_fixed: $('si').value, ai_per_pick: $('ai').value };
+  if ($('mi').value !== '') body.modal_spend = { month: D.month, amount: $('mi').value };
+  const [c, d] = await call(body);
+  $('save').disabled = false;
+  if (c === 200) load(); else alert(d.error || 'Save failed');
+};
+
+load();
+setInterval(() => { if (!document.hidden && D) load(); }, 120000);
+</script>
+</body>
+</html>
