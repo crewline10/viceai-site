@@ -287,7 +287,7 @@ $('af').onsubmit = async e => {
   let [code, d] = mode === 'up' ? await auth('signup?redirect_to=' + BACK, { email, password }) : await auth('token?grant_type=password', { email, password });
   $('ago').disabled = false; $('apw').value = '';
   if (code >= 400) return say(d.msg || d.error_description || d.message || 'That didn\'t work.', 'err');
-  if (!d.access_token) { setMode('in'); return say('Almost there: open the link we just emailed you to confirm your account. It brings you back here to choose a plan.', 'ok'); }
+  if (!d.access_token) { setMode('in'); return say(d.identities && d.identities.length === 0 ? 'That email already has an account. Sign in with your password here (or use Forgot password?).' : 'Almost there: open the link we just emailed you to confirm your account. It brings you back here to choose a plan.', d.identities && d.identities.length === 0 ? 'err' : 'ok'); }
   session = d;
   afterAuth();
 };
