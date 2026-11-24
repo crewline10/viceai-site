@@ -64,6 +64,9 @@ button:disabled{opacity:.5;cursor:wait}
 .edit input:focus{border-color:var(--cy);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
 .note{font-size:12.5px;color:var(--mut);margin-top:10px;line-height:1.45}
 .note.warn{color:#b45309}
+.capwarn{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:12px;padding:12px 16px;margin:0 0 14px;font-weight:600;font-size:14px;line-height:1.45}
+.capwarn.amber{background:#fffbeb;border-color:#fde68a;color:#b45309}
+.capwarn a{color:inherit}
 .gauges{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .g{text-align:center}.g svg{width:100%;max-width:120px;height:auto}
 .g .l{font-size:12px;font-weight:600;text-transform:capitalize;margin-top:2px;color:var(--tx)!important}
@@ -141,6 +144,7 @@ td.r,th.r{text-align:right}
 
 <!-- dashboard -->
 <div class="wrap" id="dash" hidden>
+  <div class="capwarn" id="capw" hidden></div>
   <header>
     <svg class="logo"><use href="#mark"/></svg>
     <div class="brand">Vice.ai<small>Owner dashboard</small></div>
@@ -382,6 +386,12 @@ function render(d) {
   if (document.activeElement !== $('si')) $('si').value = d.settings.supabase_fixed;
   if (document.activeElement !== $('ai')) $('ai').value = d.settings.ai_per_pick;
   $('mnote').className = 'note' + (cur.modal_used == null ? ' warn' : '');
+  $('mnote').textContent = 'Filled in every hour from Modal (you can still type it). The $30 monthly free credit is taken off before it counts as a cost.';
+  // Modal usage-limit warning: Vice.ai Online pauses for everyone when the limit is reached
+  const cap = d.settings.modal_cap || 42.5, used = cur.modal_used ?? 0, pc = Math.round(100 * used / cap);
+  $('capw').hidden = pc < 70;
+  $('capw').className = 'capwarn' + (pc < 90 ? ' amber' : '');
+  $('capw').innerHTML = `⚠️ Modal has used ${usd(used)} of its ${usd(cap)} limit this month (${pc}%). At 100% Vice.ai Online pauses for every customer. <a href="https://modal.com/settings/usage" target="_blank" rel="noopener">Raise the limit on Modal</a>.`;
 
   // users
   if (us) { count('u-tot', us.total, fInt); count('u-new', us.signups[m] || 0, fInt); count('u-7d', us.signed_in_7d, fInt); $('spark').innerHTML = spark(us.signups); }
