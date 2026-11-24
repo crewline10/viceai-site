@@ -6,133 +6,109 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Vice.ai Owner Console</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#04060a; --panel:rgba(8,18,28,.62); --line:rgba(63,240,255,.22); --line2:rgba(63,240,255,.55);
-  --cy:#3ff0ff; --cy2:#9ffbff; --red:#ff2d3f; --gold:#ffb52e; --gold2:#ffd98a; --green:#5dffa8;
-  --tx:#d7f6ff; --mut:#6f9aa8; --glow:0 0 12px rgba(63,240,255,.55);
+  --bg:#f4f7fc; --panel:#ffffff; --line:#e3e9f3; --line2:#cfdaeb;
+  --cy:#2563eb; --cy2:#1d4ed8; --red:#dc2626; --gold:#1e3a8a; --gold2:#1e3a8a; --green:#2563eb;
+  --tx:#0f172a; --mut:#64748b; --soft:#eef3fc;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:var(--bg);color:var(--tx);font-family:Rajdhani,system-ui,sans-serif;font-size:16px;min-height:100vh}
+html,body{background:var(--bg);color:var(--tx);font-family:Inter,system-ui,sans-serif;font-size:15px;min-height:100vh;-webkit-font-smoothing:antialiased}
 body{overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:
-    radial-gradient(ellipse 70% 55% at 50% 30%,rgba(63,240,255,.10),transparent 70%),
-    radial-gradient(ellipse 50% 40% at 85% 100%,rgba(255,45,63,.10),transparent 70%),
-    radial-gradient(ellipse 40% 40% at 0% 100%,rgba(255,181,46,.07),transparent 70%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='97'%3E%3Cpath d='M28 0L56 16v32L28 64 0 48V16zM28 64v33' fill='none' stroke='%233ff0ff' stroke-opacity='.07'/%3E%3C/svg%3E");}
-body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
-  background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
-.sweep{position:fixed;left:0;right:0;height:140px;top:-140px;pointer-events:none;z-index:49;
-  background:linear-gradient(180deg,transparent,rgba(63,240,255,.05),transparent);animation:sweep 7s linear infinite}
-@keyframes sweep{to{top:110vh}}
-.wrap{position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:18px 16px 40px}
-.orb{font-family:Orbitron,sans-serif;letter-spacing:.14em;text-transform:uppercase}
-header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 14px;border:1px solid var(--line);
-  background:linear-gradient(90deg,rgba(255,45,63,.10),rgba(8,18,28,.6) 30%,rgba(8,18,28,.6) 70%,rgba(255,181,46,.10));
-  clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
-.logo{width:34px;height:34px;flex:none}
-.brand{font-size:15px;font-weight:900;color:var(--gold2);text-shadow:0 0 10px rgba(255,181,46,.6)}
-.brand small{display:block;font-size:10px;color:var(--cy);font-weight:500;letter-spacing:.3em;text-shadow:var(--glow)}
+.sweep{display:none}
+.wrap{max-width:1280px;margin:0 auto;padding:20px 16px 48px}
+.orb{letter-spacing:.06em;text-transform:uppercase}
+header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+.logo{width:30px;height:30px;flex:none}
+.brand{font-size:15px;font-weight:700;color:var(--tx);text-transform:none;letter-spacing:0}
+.brand small{display:block;font-size:12px;color:var(--mut);font-weight:500;letter-spacing:0}
 .hs{margin-left:auto;display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--mut)}
-.hs b{color:var(--cy);font-weight:600}
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);margin-right:6px;animation:blink 1.6s infinite}
-.dot.warn{background:var(--gold);box-shadow:0 0 8px var(--gold)}.dot.bad{background:var(--red);box-shadow:0 0 8px var(--red)}
-@keyframes blink{50%{opacity:.35}}
-button,.btn{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;
-  color:var(--cy);background:rgba(63,240,255,.06);border:1px solid var(--line2);padding:8px 14px;transition:.2s}
-button:hover{background:rgba(63,240,255,.16);box-shadow:var(--glow)}
-button.gold{color:var(--gold2);border-color:rgba(255,181,46,.6);background:rgba(255,181,46,.08)}
+.hs b{color:var(--tx);font-weight:600}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;margin-right:6px}
+.dot.warn{background:#f59e0b}.dot.bad{background:var(--red)}
+button,.btn{font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;color:var(--cy);background:#fff;border:1px solid var(--line2);border-radius:8px;padding:8px 14px;transition:background .15s,border-color .15s}
+button:hover{background:var(--soft);border-color:var(--cy)}
+button.gold{color:#fff;background:var(--cy);border-color:var(--cy)}
+button.gold:hover{background:var(--cy2)}
 button:disabled{opacity:.5;cursor:wait}
-.grid{display:grid;gap:14px;margin-top:14px;grid-template-columns:repeat(12,1fr)}
-.p{position:relative;background:var(--panel);border:1px solid var(--line);padding:16px 16px 14px;backdrop-filter:blur(4px);min-width:0;
-  clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px))}
-.p:before,.p:after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--cy);opacity:.8}
-.p:before{left:-1px;top:-1px;border-right:0;border-bottom:0}
-.p:after{right:-1px;bottom:-1px;border-left:0;border-top:0}
-.p h2{font-family:Orbitron,sans-serif;font-size:11px;font-weight:700;letter-spacing:.26em;color:var(--cy);text-transform:uppercase;
-  display:flex;align-items:center;gap:8px;margin-bottom:12px;text-shadow:var(--glow)}
-.p h2:before{content:"";width:6px;height:6px;background:var(--red);box-shadow:0 0 8px var(--red);transform:rotate(45deg)}
-.p h2 i{flex:1;height:1px;background:linear-gradient(90deg,var(--line2),transparent)}
-.p h2 em{font-style:normal;color:var(--mut);font-weight:500;letter-spacing:.12em}
+.grid{display:grid;gap:16px;margin-top:16px;grid-template-columns:repeat(12,1fr)}
+.p{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.p h2{font-size:13px;font-weight:600;color:var(--mut);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.p h2 i{flex:1}
+.p h2 em{font-style:normal;font-weight:500;font-size:12px;color:var(--mut)}
 .c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}.c12{grid-column:span 12}
-@media(max-width:1060px){.c3{grid-column:span 6}.c4,.c5,.c7,.c8{grid-column:span 12}.c6{grid-column:span 12}}
+@media(max-width:1060px){.c3{grid-column:span 6}.c4,.c5,.c6,.c7,.c8{grid-column:span 12}}
 @media(max-width:560px){.c3{grid-column:span 12}.hs{margin-left:0}}
-.kpi .v{font-family:Orbitron,sans-serif;font-size:28px;font-weight:700;color:var(--tx);text-shadow:0 0 14px rgba(63,240,255,.45);white-space:nowrap}
-.kpi .v.gold{color:var(--gold2);text-shadow:0 0 14px rgba(255,181,46,.5)}
-.kpi .v.red{color:#ff8c96;text-shadow:0 0 14px rgba(255,45,63,.55)}
+.kpi .v{font-size:28px;font-weight:700;letter-spacing:-.02em;color:var(--tx);white-space:nowrap}
+.kpi .v.gold{color:var(--cy)}
+.kpi .v.red{color:var(--tx)}
 .kpi .s{font-size:13px;color:var(--mut);margin-top:4px}
-.kpi .s b{color:var(--cy2);font-weight:600}
-/* reactor */
-.reactor{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
-.reactor svg{width:100%;max-width:330px;height:auto;overflow:visible}
-.spin{transform-origin:200px 200px;animation:rot 26s linear infinite}.spin.r{animation-direction:reverse;animation-duration:40s}.spin.f{animation-duration:9s}
-@keyframes rot{to{transform:rotate(360deg)}}
-.legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;font-size:13px;color:var(--mut)}
-.legend span:before{content:"";display:inline-block;width:10px;height:3px;margin-right:6px;vertical-align:middle;background:currentColor;box-shadow:0 0 6px currentColor}
-/* rows */
-.row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;padding:7px 0;border-bottom:1px dashed rgba(63,240,255,.12);font-size:15px}
+.kpi .s b{color:var(--tx);font-weight:600}
+.reactor{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.reactor svg{width:100%;max-width:280px;height:auto}
+.legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;font-size:12.5px;color:var(--mut)}
+.legend span:before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+.legend span{color:var(--mut)}
+.row{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
 .row:last-child{border-bottom:0}
 .row .n{color:var(--mut)}.row .n b{color:var(--tx);font-weight:600}
-.row .a{font-family:Orbitron,sans-serif;font-size:14px}
-.row .bar{grid-column:1/-1;height:4px;background:rgba(63,240,255,.08);position:relative;overflow:hidden}
-.row .bar i{position:absolute;inset:0 auto 0 0;width:0;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
-.tot{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;padding-top:10px;border-top:1px solid var(--line2)}
-.tot .orb{font-size:11px;color:var(--mut)}
-.tot .a{font-family:Orbitron,sans-serif;font-size:20px;font-weight:700}
-.edit{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--mut)}
-.edit input{width:90px;background:rgba(0,0,0,.4);border:1px solid var(--line2);color:var(--gold2);font-family:Orbitron,sans-serif;font-size:13px;padding:7px 8px;outline:none}
-.edit input:focus{box-shadow:var(--glow)}
-.note{font-size:12.5px;color:var(--mut);margin-top:8px;line-height:1.35}
-.note.warn{color:var(--gold)}
+.row .a{font-weight:600;font-variant-numeric:tabular-nums}
+.row .bar{grid-column:1/-1;height:6px;background:var(--soft);border-radius:3px;position:relative;overflow:hidden}
+.row .bar i{position:absolute;inset:0 auto 0 0;width:0;border-radius:3px;box-shadow:none!important;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.tot{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;padding-top:12px;border-top:1px solid var(--line2)}
+.tot .orb{font-size:12px;color:var(--mut);font-weight:600}
+.tot .a{font-size:20px;font-weight:700}
+.edit{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--mut)}
+.edit input{width:90px;background:#fff;border:1px solid var(--line2);border-radius:8px;color:var(--tx);font:inherit;font-size:14px;padding:7px 9px;outline:none}
+.edit input:focus{border-color:var(--cy);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.note{font-size:12.5px;color:var(--mut);margin-top:10px;line-height:1.45}
+.note.warn{color:#b45309}
 .gauges{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.g{text-align:center}.g svg{width:100%;max-width:130px;height:auto}
-.g .l{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:.2em;margin-top:2px}
-.g .m{font-size:13px;color:var(--mut)}
+.g{text-align:center}.g svg{width:100%;max-width:120px;height:auto}
+.g .l{font-size:12px;font-weight:600;text-transform:capitalize;margin-top:2px;color:var(--tx)!important}
 table{width:100%;border-collapse:collapse;font-size:14px}
-th{font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:.2em;color:var(--mut);text-align:left;font-weight:500;padding:6px 8px;border-bottom:1px solid var(--line2)}
-td{padding:7px 8px;border-bottom:1px dashed rgba(63,240,255,.1);vertical-align:middle}
+th{font-size:12px;color:var(--mut);text-align:left;font-weight:500;padding:8px;border-bottom:1px solid var(--line2)}
+td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:middle;font-variant-numeric:tabular-nums}
 td.r,th.r{text-align:right}
 .scroll{overflow-x:auto;max-height:420px;overflow-y:auto}
-.tag{font-family:Orbitron,sans-serif;font-size:9.5px;letter-spacing:.15em;padding:2px 6px;border:1px solid currentColor;text-transform:uppercase}
-.t-starter{color:var(--cy)}.t-pro{color:var(--gold)}.t-studio{color:var(--red)}.t-owner{color:var(--green)}
-.mb{height:6px;background:rgba(63,240,255,.08);min-width:110px;position:relative}
-.mb i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--cy),var(--gold));box-shadow:0 0 8px rgba(63,240,255,.6)}
-.mb i.hot{background:linear-gradient(90deg,var(--gold),var(--red))}
+.tag{font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px;text-transform:capitalize;background:var(--soft);color:var(--cy)}
+.t-starter{color:#3b82f6}.t-pro{color:#1d4ed8}.t-studio{color:#fff;background:#1e3a8a}.t-owner{color:var(--mut);background:#f1f5f9}
+.mb{height:6px;background:var(--soft);border-radius:3px;min-width:110px;position:relative;overflow:hidden}
+.mb i{position:absolute;inset:0 auto 0 0;background:var(--cy);border-radius:3px;transition:width 1s}
+.mb i.hot{background:#1e3a8a}
 .chart svg{width:100%;height:auto;display:block}
-.chart text{font-family:Rajdhani,sans-serif;fill:var(--mut);font-size:12px}
+.chart text{font-family:Inter,sans-serif;fill:var(--mut);font-size:12px}
 .stat3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
-.stat3 div{border:1px solid var(--line);padding:8px 10px;background:rgba(63,240,255,.03)}
-.stat3 .v{font-family:Orbitron,sans-serif;font-size:22px;font-weight:700}
-.stat3 .k{font-size:11px;letter-spacing:.18em;color:var(--mut);text-transform:uppercase}
-.err{color:#ff8c96}
-/* gate */
-.gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;position:relative;z-index:1}
-.gate .p{width:100%;max-width:420px;padding:30px 26px}
-.gate h1{font-family:Orbitron,sans-serif;font-size:18px;letter-spacing:.24em;color:var(--gold2);text-shadow:0 0 12px rgba(255,181,46,.6);margin:14px 0 4px;text-align:center}
-.gate p.sub{text-align:center;color:var(--mut);font-size:14px;margin-bottom:20px;letter-spacing:.06em}
-.gate label{display:block;font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:.22em;color:var(--cy);margin:12px 0 6px}
-.gate input{width:100%;background:rgba(0,0,0,.45);border:1px solid var(--line2);color:var(--tx);font:500 16px Rajdhani,sans-serif;padding:10px 12px;outline:none}
-.gate input:focus{box-shadow:var(--glow)}
-.gate button{width:100%;margin-top:20px;padding:12px}
+.stat3 div{background:var(--soft);border-radius:10px;padding:10px 12px}
+.stat3 .v{font-size:22px;font-weight:700}
+.stat3 .k{font-size:12px;color:var(--mut)}
+.err{color:var(--red)}
+.gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.gate .p{width:100%;max-width:400px;padding:32px 28px}
+.gate h1{font-size:20px;font-weight:700;color:var(--tx);margin:14px 0 4px;text-align:center}
+.gate p.sub{text-align:center;color:var(--mut);font-size:14px;margin-bottom:18px}
+.gate label{display:block;font-size:13px;font-weight:500;color:var(--tx);margin:12px 0 6px}
+.gate input{width:100%;background:#fff;border:1px solid var(--line2);border-radius:8px;color:var(--tx);font:inherit;font-size:15px;padding:10px 12px;outline:none}
+.gate input:focus{border-color:var(--cy);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.gate button{width:100%;margin-top:20px;padding:11px;color:#fff;background:var(--cy);border-color:var(--cy)}
+.gate button:hover{background:var(--cy2)}
 .gate .msg{min-height:20px;margin-top:12px;text-align:center;font-size:14px;color:var(--mut)}
-.gate .msg.err{color:#ff8c96}
-.denied h1{color:#ff8c96;text-shadow:0 0 14px rgba(255,45,63,.7)}
-.boot{font-family:Orbitron,sans-serif;font-size:12px;letter-spacing:.3em;color:var(--cy);text-shadow:var(--glow);text-align:center;margin-top:40vh}
+.gate .msg.err{color:var(--red)}
+.denied h1{color:var(--tx)}
+.boot{font-size:14px;color:var(--mut);text-align:center;margin-top:40vh}
 [hidden]{display:none!important}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<div class="sweep"></div>
 
 <svg width="0" height="0" style="position:absolute">
   <defs>
-    <filter id="gl" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <linearGradient id="gGold" x1="0" x2="1"><stop offset="0" stop-color="#ff2d3f"/><stop offset="1" stop-color="#ffb52e"/></linearGradient>
-    <linearGradient id="gCy" x1="0" x2="1"><stop offset="0" stop-color="#3ff0ff"/><stop offset="1" stop-color="#9ffbff"/></linearGradient>
-    <symbol id="mark" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="none" stroke="#3ff0ff" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="20" cy="20" r="11" fill="none" stroke="#ffb52e" stroke-width="2"/><path d="M20 11l7.8 13.5H12.2z" fill="none" stroke="#ff2d3f" stroke-width="1.6"/><circle cx="20" cy="20" r="3.4" fill="#9ffbff"/></symbol>
+    <filter id="gl"><feOffset dx="0" dy="0"/></filter>
+    <linearGradient id="gGold" x1="0" x2="1"><stop offset="0" stop-color="#93c5fd"/><stop offset="1" stop-color="#bfdbfe"/></linearGradient>
+    <linearGradient id="gCy" x1="0" x2="1"><stop offset="0" stop-color="#1d4ed8"/><stop offset="1" stop-color="#3b82f6"/></linearGradient>
+    <symbol id="mark" viewBox="0 0 40 40"><rect width="40" height="40" rx="10" fill="#2563eb"/><circle cx="20" cy="20" r="10" fill="none" stroke="#fff" stroke-width="3"/><circle cx="20" cy="20" r="3.5" fill="#fff"/></symbol>
   </defs>
 </svg>
 
@@ -140,12 +116,12 @@ td.r,th.r{text-align:right}
 <section class="gate" id="gate" hidden>
   <div class="p">
     <svg class="logo" style="display:block;margin:0 auto;width:64px;height:64px"><use href="#mark"/></svg>
-    <h1>OWNER CONSOLE</h1>
-    <p class="sub">Vice.ai command systems. Identify yourself.</p>
+    <h1>Owner dashboard</h1>
+    <p class="sub">Sign in with the owner account.</p>
     <form id="gf">
       <label for="ge">Email</label><input id="ge" type="email" autocomplete="username" required>
       <label for="gp">Password</label><input id="gp" type="password" autocomplete="current-password" required>
-      <button id="gb" type="submit">Authenticate</button>
+      <button id="gb" type="submit">Sign in</button>
       <div class="msg" id="gm"></div>
     </form>
   </div>
@@ -155,21 +131,21 @@ td.r,th.r{text-align:right}
 <section class="gate denied" id="denied" hidden>
   <div class="p" style="text-align:center">
     <svg class="logo" style="display:block;margin:0 auto;width:64px;height:64px"><use href="#mark"/></svg>
-    <h1>ACCESS DENIED</h1>
+    <h1>Access denied</h1>
     <p class="sub" id="dm">This console is for the owner only.</p>
     <button id="dout">Sign out</button>
   </div>
 </section>
 
-<div class="boot orb" id="boot">Initializing systems…</div>
+<div class="boot orb" id="boot">Loading…</div>
 
 <!-- dashboard -->
 <div class="wrap" id="dash" hidden>
   <header>
     <svg class="logo"><use href="#mark"/></svg>
-    <div class="brand orb">Vice.ai<small>Owner console</small></div>
+    <div class="brand">Vice.ai<small>Owner dashboard</small></div>
     <div class="hs">
-      <span><i class="dot" id="sd"></i><span id="st">Systems online</span></span>
+      <span><i class="dot" id="sd"></i><span id="st">Up to date</span></span>
       <span>Period <b id="hm">—</b></span>
       <span>Synced <b id="ht">—</b></span>
       <span id="who"></span>
@@ -181,47 +157,41 @@ td.r,th.r{text-align:right}
   <div class="grid">
     <div class="p kpi c3"><h2>MRR<i></i></h2><div class="v gold" id="k-mrr">$0</div><div class="s" id="k-mrr-s">—</div></div>
     <div class="p kpi c3"><h2>Revenue this month<i></i></h2><div class="v" id="k-rev">$0</div><div class="s" id="k-rev-s">—</div></div>
-    <div class="p kpi c3"><h2>Deductions<i></i></h2><div class="v red" id="k-cost">$0</div><div class="s" id="k-cost-s">—</div></div>
+    <div class="p kpi c3"><h2>Costs<i></i></h2><div class="v red" id="k-cost">$0</div><div class="s" id="k-cost-s">—</div></div>
     <div class="p kpi c3"><h2>Users<i></i></h2><div class="v" id="k-usr">0</div><div class="s" id="k-usr-s">—</div></div>
 
     <div class="p c5 reactor">
-      <h2 style="align-self:stretch">Net profit · this month<i></i><em id="r-m"></em></h2>
+      <h2 style="align-self:stretch">Net profit this month<i></i><em id="r-m"></em></h2>
       <svg viewBox="0 0 400 400" id="reactor" aria-label="Net profit this month">
-        <g class="spin r"><circle cx="200" cy="200" r="190" fill="none" stroke="#3ff0ff" stroke-opacity=".25" stroke-width="1" stroke-dasharray="2 6"/></g>
-        <g class="spin"><circle cx="200" cy="200" r="178" fill="none" stroke="#3ff0ff" stroke-opacity=".5" stroke-width="2" stroke-dasharray="60 14 6 14"/></g>
-        <circle cx="200" cy="200" r="160" fill="none" stroke="rgba(63,240,255,.08)" stroke-width="16"/>
-        <circle id="r-rev" cx="200" cy="200" r="160" fill="none" stroke="url(#gCy)" stroke-width="16" stroke-linecap="butt" transform="rotate(-90 200 200)" stroke-dasharray="0 1006" filter="url(#gl)" style="transition:stroke-dasharray 1.6s cubic-bezier(.2,.8,.2,1)"/>
-        <circle cx="200" cy="200" r="136" fill="none" stroke="rgba(255,45,63,.08)" stroke-width="10"/>
-        <circle id="r-cost" cx="200" cy="200" r="136" fill="none" stroke="url(#gGold)" stroke-width="10" transform="rotate(-90 200 200)" stroke-dasharray="0 855" filter="url(#gl)" style="transition:stroke-dasharray 1.6s cubic-bezier(.2,.8,.2,1)"/>
-        <g class="spin f"><circle cx="200" cy="200" r="118" fill="none" stroke="#ffb52e" stroke-opacity=".55" stroke-width="1.5" stroke-dasharray="3 9"/></g>
+        <circle cx="200" cy="200" r="160" fill="none" stroke="#eef3fc" stroke-width="22"/>
+        <circle id="r-rev" cx="200" cy="200" r="160" fill="none" stroke="#2563eb" stroke-width="22" stroke-linecap="round" transform="rotate(-90 200 200)" stroke-dasharray="0 1006" style="transition:stroke-dasharray 1.4s cubic-bezier(.2,.8,.2,1)"/>
+        <circle cx="200" cy="200" r="130" fill="none" stroke="#f4f7fc" stroke-width="14"/>
+        <circle id="r-cost" cx="200" cy="200" r="130" fill="none" stroke="#93c5fd" stroke-width="14" stroke-linecap="round" transform="rotate(-90 200 200)" stroke-dasharray="0 817" style="transition:stroke-dasharray 1.4s cubic-bezier(.2,.8,.2,1)"/>
         <g id="ticks"></g>
-        <circle cx="200" cy="200" r="98" fill="rgba(4,10,16,.85)" stroke="rgba(63,240,255,.35)"/>
-        <circle cx="200" cy="200" r="98" fill="url(#core)" opacity=".5"/>
-        <radialGradient id="core"><stop offset="0" stop-color="#3ff0ff" stop-opacity=".35"/><stop offset="1" stop-color="#3ff0ff" stop-opacity="0"/></radialGradient>
-        <text x="200" y="168" text-anchor="middle" font-family="Orbitron" font-size="11" letter-spacing="3" fill="#6f9aa8">NET PROFIT</text>
-        <text id="r-net" x="200" y="212" text-anchor="middle" font-family="Orbitron" font-weight="900" font-size="36" fill="#d7f6ff" filter="url(#gl)">$0</text>
-        <text id="r-mg" x="200" y="240" text-anchor="middle" font-family="Orbitron" font-size="12" letter-spacing="2" fill="#ffb52e">MARGIN —</text>
+        <text x="200" y="172" text-anchor="middle" font-family="Inter" font-weight="500" font-size="15" fill="#64748b">Net profit</text>
+        <text id="r-net" x="200" y="218" text-anchor="middle" font-family="Inter" font-weight="700" font-size="44" fill="#0f172a">$0</text>
+        <text id="r-mg" x="200" y="248" text-anchor="middle" font-family="Inter" font-weight="600" font-size="15" fill="#2563eb">Margin —</text>
       </svg>
-      <div class="legend"><span style="color:var(--cy)">Kept after refunds</span><span style="color:var(--gold)">Deductions</span></div>
+      <div class="legend"><span style="--c:#2563eb">Kept after refunds</span><span style="--c:#93c5fd">Deductions</span></div>
     </div>
 
     <div class="p c7">
       <h2>Profit over time<i></i><em>last 6 months</em></h2>
       <div class="chart" id="chart"></div>
-      <div class="legend" style="margin-top:6px"><span style="color:var(--cy)">Revenue</span><span style="color:var(--red)">Costs</span><span style="color:var(--gold)">Net profit</span></div>
+      <div class="legend" style="margin-top:6px"><span style="--c:#2563eb">Revenue</span><span style="--c:#bfdbfe">Costs</span><span style="--c:#1e3a8a">Net profit</span></div>
     </div>
 
     <div class="p c6">
-      <h2>Revenue · Stripe live<i></i><em id="sl"></em></h2>
+      <h2>Revenue<i></i><em id="sl"></em></h2>
       <div class="gauges" id="gauges"></div>
       <div id="revrows" style="margin-top:12px"></div>
       <div class="note err" id="serr" hidden></div>
     </div>
 
     <div class="p c6">
-      <h2>Deductions · this month<i></i></h2>
+      <h2>Costs this month<i></i></h2>
       <div id="costrows"></div>
-      <div class="tot"><span class="orb">Total</span><span class="a" id="ctot" style="color:#ff8c96">$0</span></div>
+      <div class="tot"><span class="orb">Total</span><span class="a" id="ctot" >$0</span></div>
       <div class="edit">
         <span>Modal used in <b id="em" style="color:var(--tx)"></b> $</span><input id="mi" type="number" min="0" step="0.01" placeholder="0.00">
         <span>Supabase $/mo</span><input id="si" type="number" min="0" step="1">
@@ -232,7 +202,7 @@ td.r,th.r{text-align:right}
     </div>
 
     <div class="p c5">
-      <h2>Users &amp; licenses<i></i></h2>
+      <h2>Users and licenses<i></i></h2>
       <div class="stat3">
         <div><div class="k">Sign-ups</div><div class="v" id="u-tot">0</div></div>
         <div><div class="k">New this month</div><div class="v" id="u-new" style="color:var(--gold2)">0</div></div>
@@ -244,7 +214,7 @@ td.r,th.r{text-align:right}
     </div>
 
     <div class="p c7">
-      <h2>Usage · minutes this month<i></i><em id="u-sum"></em></h2>
+      <h2>Minutes used this month<i></i><em id="u-sum"></em></h2>
       <div class="scroll"><table><thead><tr><th>Account</th><th>Plan</th><th>Minutes used</th><th class="r">Used</th><th class="r">Shorts</th></tr></thead><tbody id="usage"></tbody></table></div>
     </div>
 
@@ -289,7 +259,7 @@ async function call(body) {
 function view(v) { for (const id of ['gate', 'denied', 'dash', 'boot']) $(id).hidden = id !== v; }
 
 $('gf').onsubmit = async e => {
-  e.preventDefault(); $('gb').disabled = true; $('gm').className = 'msg'; $('gm').textContent = 'Verifying…';
+  e.preventDefault(); $('gb').disabled = true; $('gm').className = 'msg'; $('gm').textContent = 'Signing in…';
   const [c, d] = await authPost('token?grant_type=password', { email: $('ge').value.trim(), password: $('gp').value });
   $('gb').disabled = false; $('gp').value = '';
   if (c >= 400 || !d.access_token) { $('gm').className = 'msg err'; $('gm').textContent = d.msg || d.error_description || 'Wrong email or password.'; return; }
@@ -309,20 +279,15 @@ function count(el, to, fmt) {
 }
 const fUsd0 = x => usd(x, 0), fUsd = x => usd(x), fInt = x => Math.round(x).toLocaleString('en-US');
 
-// reactor ticks
-(() => { let g = ''; for (let i = 0; i < 60; i++) { const a = i / 60 * Math.PI * 2, r1 = i % 5 ? 104 : 100, r2 = 110;
-  g += `<line x1="${200 + r1 * Math.cos(a)}" y1="${200 + r1 * Math.sin(a)}" x2="${200 + r2 * Math.cos(a)}" y2="${200 + r2 * Math.sin(a)}" stroke="${i % 5 ? 'rgba(63,240,255,.35)' : '#3ff0ff'}" stroke-width="${i % 5 ? 1 : 2}"/>`; }
-  $('ticks').innerHTML = g; })();
 
 function ring(pct, color, label, big, small) {
   const r = 46, C = 2 * Math.PI * r, p = Math.max(0, Math.min(1, pct));
   return `<div class="g"><svg viewBox="0 0 120 120">
-    <circle cx="60" cy="60" r="56" fill="none" stroke="${color}" stroke-opacity=".25" stroke-dasharray="2 5"/>
-    <circle cx="60" cy="60" r="${r}" fill="none" stroke="${color}" stroke-opacity=".1" stroke-width="9"/>
-    <circle class="arc" cx="60" cy="60" r="${r}" fill="none" stroke="${color}" stroke-width="9" transform="rotate(-90 60 60)"
+        <circle cx="60" cy="60" r="${r}" fill="none" stroke="#eef3fc" stroke-width="9"/>
+    <circle class="arc" cx="60" cy="60" r="${r}" fill="none" stroke="${color}" stroke-width="9" stroke-linecap="round" transform="rotate(-90 60 60)"
       stroke-dasharray="0 ${C}" data-d="${C * p} ${C}" filter="url(#gl)" style="transition:stroke-dasharray 1.4s cubic-bezier(.2,.8,.2,1)"/>
-    <text x="60" y="64" text-anchor="middle" font-family="Orbitron" font-weight="700" font-size="22" fill="#d7f6ff">${big}</text>
-    <text x="60" y="82" text-anchor="middle" font-family="Rajdhani" font-size="11" fill="#6f9aa8">${small}</text></svg>
+    <text x="60" y="64" text-anchor="middle" font-family="Inter" font-weight="700" font-size="24" fill="#0f172a">${big}</text>
+    <text x="60" y="82" text-anchor="middle" font-family="Inter" font-size="11" fill="#64748b">${small}</text></svg>
     <div class="l" style="color:${color}">${label}</div></div>`;
 }
 function row(name, amount, pct, color, cls) {
@@ -341,22 +306,22 @@ function chart(profit) {
   const y = v => T + (H - T - B) * (1 - (v - min) / span), bw = (W - L - R) / n;
   let s = `<svg viewBox="0 0 ${W} ${H}">`;
   for (let i = 0; i <= 4; i++) { const v = min + span * i / 4;
-    s += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(63,240,255,${i ? .08 : .2})"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${usd(v, 0)}</text>`; }
-  s += `<line x1="${L}" x2="${W - R}" y1="${y(0)}" y2="${y(0)}" stroke="rgba(63,240,255,.45)"/>`;
+    s += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="${i ? '#eef2f8' : '#dbe3ef'}"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${usd(v, 0)}</text>`; }
+  s += `<line x1="${L}" x2="${W - R}" y1="${y(0)}" y2="${y(0)}" stroke="#cbd5e1"/>`;
   profit.forEach((p, i) => { const x = L + bw * i, w = bw * .28, kept = p.gross - p.refunds;
-    s += `<rect x="${x + bw * .18}" y="${y(Math.max(0, kept))}" width="${w}" height="${Math.abs(y(kept) - y(0))}" fill="url(#gCy)" opacity=".85"><title>${MON(p.month)} revenue ${usd(kept)}</title></rect>`;
-    s += `<rect x="${x + bw * .18 + w + 3}" y="${y(p.costs)}" width="${w}" height="${Math.abs(y(p.costs) - y(0))}" fill="#ff2d3f" opacity=".75"><title>${MON(p.month)} costs ${usd(p.costs)}</title></rect>`;
+    s += `<rect x="${x + bw * .18}" y="${y(Math.max(0, kept))}" width="${w}" height="${Math.abs(y(kept) - y(0))}" fill="#2563eb" rx="3"><title>${MON(p.month)} revenue ${usd(kept)}</title></rect>`;
+    s += `<rect x="${x + bw * .18 + w + 3}" y="${y(p.costs)}" width="${w}" height="${Math.abs(y(p.costs) - y(0))}" fill="#bfdbfe" rx="3"><title>${MON(p.month)} costs ${usd(p.costs)}</title></rect>`;
     s += `<text x="${x + bw / 2}" y="${H - 6}" text-anchor="middle">${MON(p.month)}</text>`; });
   const pts = profit.map((p, i) => `${L + bw * i + bw / 2},${y(p.net)}`).join(' ');
-  s += `<polyline points="${pts}" fill="none" stroke="#ffb52e" stroke-width="2.5" filter="url(#gl)"/>`;
-  profit.forEach((p, i) => s += `<circle cx="${L + bw * i + bw / 2}" cy="${y(p.net)}" r="4" fill="#04060a" stroke="#ffd98a" stroke-width="2"><title>${MON(p.month)} net ${usd(p.net)}</title></circle>`);
+  s += `<polyline points="${pts}" fill="none" stroke="#1e3a8a" stroke-width="2.5"/>`;
+  profit.forEach((p, i) => s += `<circle cx="${L + bw * i + bw / 2}" cy="${y(p.net)}" r="4" fill="#fff" stroke="#1e3a8a" stroke-width="2"><title>${MON(p.month)} net ${usd(p.net)}</title></circle>`);
   return s + '</svg>';
 }
 function spark(signups) {
   const ks = Object.keys(signups), v = ks.map(k => signups[k]), max = Math.max(1, ...v), W = 400, H = 70, bw = W / ks.length;
   let s = `<svg viewBox="0 0 ${W} ${H + 16}">`;
   ks.forEach((k, i) => { const h = (H - 6) * v[i] / max;
-    s += `<rect x="${i * bw + bw * .22}" y="${H - h}" width="${bw * .56}" height="${Math.max(1, h)}" fill="url(#gCy)" opacity=".8"><title>${MON(k)}: ${v[i]} sign-ups</title></rect>
+    s += `<rect x="${i * bw + bw * .22}" y="${H - h}" width="${bw * .56}" height="${Math.max(1, h)}" fill="#3b82f6" rx="3"><title>${MON(k)}: ${v[i]} sign-ups</title></rect>
       <text x="${i * bw + bw / 2}" y="${H + 13}" text-anchor="middle">${MON(k)} · ${v[i]}</text>`; });
   return s + '</svg>';
 }
@@ -369,7 +334,7 @@ function render(d) {
   $('ht').textContent = new Date(d.at).toLocaleTimeString();
   $('who').innerHTML = '<b>' + esc(d.owner) + '</b>';
   const errs = [d.stripe_error, d.users_error, d.licenses_error].filter(Boolean);
-  $('sd').className = 'dot' + (errs.length ? ' warn' : ''); $('st').textContent = errs.length ? 'Partial data' : 'Systems online';
+  $('sd').className = 'dot' + (errs.length ? ' warn' : ''); $('st').textContent = errs.length ? 'Partial data' : 'Up to date';
 
   // KPIs
   count('k-mrr', st?.mrr ?? 0, fUsd0);
@@ -388,27 +353,27 @@ function render(d) {
   count($('r-net'), cur.net, fUsd0);
   const base = Math.max(kept, cur.costs, 1);
   $('r-rev').setAttribute('stroke-dasharray', `${1005.3 * Math.max(0, kept) / base} 1006`);
-  $('r-cost').setAttribute('stroke-dasharray', `${854.5 * cur.costs / base} 855`);
-  $('r-net').setAttribute('fill', cur.net >= 0 ? '#d7f6ff' : '#ff8c96');
-  $('r-mg').textContent = kept > 0 ? `MARGIN ${Math.round(cur.net / kept * 100)}%` : 'NO REVENUE YET';
+  $('r-cost').setAttribute('stroke-dasharray', `${816.8 * cur.costs / base} 855`);
+  $('r-net').setAttribute('fill', cur.net >= 0 ? '#0f172a' : '#dc2626');
+  $('r-mg').textContent = kept > 0 ? `Margin ${Math.round(cur.net / kept * 100)}%` : 'No revenue yet';
 
   $('chart').innerHTML = chart(d.profit);
 
   // revenue
-  $('sl').textContent = st ? (st.livemode === false ? 'TEST MODE' : 'LIVE') : '';
+  $('sl').textContent = st ? (st.livemode === false ? 'Stripe test mode' : 'Stripe live') : '';
   const plans = st?.plans || {}, maxA = Math.max(1, ...Object.values(plans).map(p => p.active));
-  const col = { starter: '#3ff0ff', pro: '#ffb52e', studio: '#ff2d3f' };
+  const col = { starter: '#93c5fd', pro: '#3b82f6', studio: '#1e3a8a' };
   $('gauges').innerHTML = ['starter', 'pro', 'studio'].map(p => ring((plans[p]?.active || 0) / maxA, col[p], p, plans[p]?.active || 0, usd(plans[p]?.mrr || 0, 0) + '/mo')).join('');
   $('revrows').innerHTML =
-    row('Payments this month <b>(' + cur.payments + ')</b>', usd(cur.gross), 1, '#3ff0ff') +
-    row('Refunds', '-' + usd(cur.refunds), cur.gross ? cur.refunds / cur.gross : 0, '#ff2d3f', 'err') +
-    row('Kept after refunds', usd(kept), cur.gross ? kept / cur.gross : 0, '#ffb52e') +
-    row('Canceled subscriptions <b>(all time ' + (st?.canceled_total ?? 0) + ')</b>', String(st?.canceled_this_month ?? 0) + ' this mo', 0, '#ff2d3f');
+    row('Payments this month <b>(' + cur.payments + ')</b>', usd(cur.gross), 1, '#2563eb') +
+    row('Refunds', '-' + usd(cur.refunds), cur.gross ? cur.refunds / cur.gross : 0, '#93c5fd', 'err') +
+    row('Kept after refunds', usd(kept), cur.gross ? kept / cur.gross : 0, '#1e3a8a') +
+    row('Canceled subscriptions <b>(all time ' + (st?.canceled_total ?? 0) + ')</b>', String(st?.canceled_this_month ?? 0) + ' this mo', 0, '#93c5fd');
   $('serr').hidden = !d.stripe_error; $('serr').textContent = 'Stripe: ' + (d.stripe_error || '');
 
   // costs
-  const cs = [['Stripe fees', cur.stripe_fees, '#3ff0ff'], ['Modal compute' + (cur.modal_used == null ? ' <b style="color:var(--gold)">(not entered)</b>' : ` <b>(${usd(cur.modal_used)} used)</b>`), cur.modal ?? 0, '#ffb52e'],
-    ['AI picks <b>(est.)</b>', cur.ai, '#ff2d3f'], ['Supabase', cur.supabase, '#9ffbff']];
+  const cs = [['Stripe fees', cur.stripe_fees, '#2563eb'], ['Modal compute' + (cur.modal_used == null ? ' <b style="color:#b45309">(not entered)</b>' : ` <b>(${usd(cur.modal_used)} used)</b>`), cur.modal ?? 0, '#1e3a8a'],
+    ['AI picks <b>(est.)</b>', cur.ai, '#3b82f6'], ['Supabase', cur.supabase, '#93c5fd']];
   const cmax = Math.max(1, ...cs.map(c => c[1]));
   $('costrows').innerHTML = cs.map(c => row(c[0], usd(c[1]), c[1] / cmax, c[2])).join('');
   count('ctot', cur.costs, fUsd);
@@ -423,7 +388,7 @@ function render(d) {
   const bp = lic?.by_plan || {};
   $('licrows').innerHTML = ['starter', 'pro', 'studio', 'owner'].filter(p => bp[p] || p !== 'owner').map(p => {
     const s = bp[p] || {}, a = (s.active || 0) + (s.trialing || 0), c = s.canceled || 0, other = Object.entries(s).filter(([k]) => !['active', 'trialing', 'canceled'].includes(k)).reduce((x, [, v]) => x + v, 0);
-    return row(`<span class="tag t-${p}">${p}</span> &nbsp;<b>${a}</b> active · ${c} churned${other ? ' · ' + other + ' other' : ''}`, a, a / Math.max(1, active), col[p] || '#5dffa8');
+    return row(`<span class="tag t-${p}">${p}</span> &nbsp;<b>${a}</b> active · ${c} churned${other ? ' · ' + other + ' other' : ''}`, a, a / Math.max(1, active), col[p] || '#cbd5e1');
   }).join('');
   const ue = [d.users_error, d.licenses_error].filter(Boolean).join(' · ');
   $('uerr').hidden = !ue; $('uerr').textContent = ue;
@@ -441,7 +406,7 @@ function render(d) {
   // payments
   const rp = st?.recent || [];
   $('pays').innerHTML = rp.length ? rp.map(p => `<tr><td>${new Date(p.at * 1000).toLocaleString()}</td><td>${esc(p.email || '—')}</td>
-      <td class="r" style="font-family:Orbitron;color:var(--gold2)">${usd(p.amount)} ${esc((p.currency || '').toUpperCase())}</td><td class="r ${p.refunded ? 'err' : ''}">${p.refunded ? usd(p.refunded) : '—'}</td></tr>`).join('')
+      <td class="r" style="font-weight:600">${usd(p.amount)} ${esc((p.currency || '').toUpperCase())}</td><td class="r ${p.refunded ? 'err' : ''}">${p.refunded ? usd(p.refunded) : '—'}</td></tr>`).join('')
     : '<tr><td colspan="4" style="color:var(--mut)">No payments in the last 6 months.</td></tr>';
 
   grow(document);
