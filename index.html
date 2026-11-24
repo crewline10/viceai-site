@@ -21,7 +21,8 @@ body::before{content:"";position:fixed;inset:0;z-index:-2;background:radial-grad
 .btn:hover{transform:translateY(-2px)}.btn.p{background:var(--grad);background-size:200% 100%;color:#fff;border:0;box-shadow:0 10px 26px rgba(47,84,255,.32);animation:shine 6s ease-in-out infinite}
 .btn.dark{background:var(--t);color:#fff;border:0}
 @keyframes shine{0%,100%{background-position:0 0}50%{background-position:100% 0}}
-.bar{background:var(--grad);color:#fff;text-align:center;font:600 13px 'Poppins',sans-serif;padding:9px 12px}
+.bar{display:block;background:var(--grad);color:#fff;text-align:center;font:600 13px 'Poppins',sans-serif;padding:9px 12px;text-decoration:none}
+#ea_t{display:inline-block;min-width:11ch;font-variant-numeric:tabular-nums;background:rgba(255,255,255,.18);border-radius:6px;padding:1px 7px;margin-left:2px}
 nav{position:sticky;top:12px;z-index:20;margin:14px auto 0;width:min(1180px,calc(100% - 32px));display:flex;align-items:center;gap:6px;padding:10px 10px 10px 20px;background:rgba(255,255,255,.85);backdrop-filter:blur(14px);border:1px solid var(--l);border-radius:999px;box-shadow:0 10px 30px rgba(47,84,255,.1)}
 .logo{display:flex;align-items:center;gap:9px;font:900 22px var(--fd);letter-spacing:-.03em;color:var(--t);text-decoration:none}
 .logo svg{width:30px;height:30px}
@@ -107,7 +108,7 @@ dialog .btn{width:100%;min-height:50px}.dx{float:right;background:none;border:0;
 </head>
 <body>
 <svg class=orbit viewBox="0 0 1500 1500" aria-hidden=true><g fill=none stroke="#94A6D9" stroke-width="1.4" stroke-dasharray="7 9"><circle cx=750 cy=750 r=300 /><circle cx=750 cy=750 r=520 /><circle cx=750 cy=750 r=730 /></g><g fill="#2F54FF"><circle cx=750 cy=450 r=7 /><circle cx=1268 cy=770 r=7 /><circle cx=270 cy=1030 r=7 /></g></svg>
-<div class=bar>New: built-in AI picks your best moments. No AI tools to set up.</div>
+<a class=bar id=ea href="#pricing" data-end="2026-12-01T23:59:59Z">🔥 Early access pricing: lock in <b>$5 / $9 / $19</b> for as long as you stay subscribed. Ends in <span id=ea_t>7 days</span></a>
 <nav>
   <a class=logo href="#"><svg viewBox="0 0 256 256" aria-hidden=true><defs><linearGradient id=g x1=0 y1=0 x2=1 y2=1><stop offset=0 stop-color="#2F54FF"/><stop offset=1 stop-color="#6E8BFF"/></linearGradient></defs><rect x=16 y=16 width=224 height=224 rx=64 fill="url(#g)"/><path d="M70 82l58 104 58-104" fill=none stroke="#fff" stroke-width=26 stroke-linecap=round stroke-linejoin=round /><circle cx=188 cy=188 r=14 fill="#fff"/></svg>Vice.ai</a>
   <div class=links><a href="#features">Features</a><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="/app/">Studio</a></div>
@@ -146,7 +147,7 @@ dialog .btn{width:100%;min-height:50px}.dx{float:right;background:none;border:0;
   </div></section>
 
   <section class=sec id=pricing><div class=wrap>
-    <h2 class=rv>Simple monthly plans</h2><p class=rv>Everything included, runs in your browser. Cancel any time.</p>
+    <h2 class=rv>Simple monthly plans</h2><p class=rv>Everything included, runs in your browser. Cancel any time.</p><p class=rv id=ea_p><b>Early access price</b>: sign up before it ends and keep this price while you stay subscribed.</p>
     <div class=plans>
       <div class="plan rv"><h3>Starter</h3><div class=price>$5<small>/month</small></div><p class=pd>For trying live clipping on your favourite streamer.</p><ul><li>Watch 2 streamers at once</li><li>25 hours of live watching</li><li>40 live clips a month</li><li>Captions, hooks, face tracking</li></ul><button class=btn data-plan=starter>Choose Starter</button></div>
       <div class="plan hot rv"><span class=tag>Most popular</span><h3>Pro</h3><div class=price>$9<small>/month</small></div><p class=pd>For daily clippers posting a few Shorts a day.</p><ul><li>Watch 3 streamers at once</li><li>50 hours of live watching</li><li>85 live clips a month</li><li>Everything in Starter</li></ul><button class="btn p" data-plan=pro>Choose Pro</button></div>
@@ -294,6 +295,20 @@ $('af').onsubmit = async e => {
   session = d;
   afterAuth();
 };
+</script>
+<script>
+(function () {  // early access countdown; the bar and note disappear when it ends
+  const bar = document.getElementById('ea'), t = document.getElementById('ea_t'), note = document.getElementById('ea_p');
+  if (!bar) return;
+  const end = Date.parse(bar.dataset.end);
+  const tick = () => {
+    const ms = end - Date.now();
+    if (ms <= 0) { bar.remove(); note && note.remove(); return clearInterval(iv); }
+    const d = Math.floor(ms / 864e5), h = Math.floor(ms / 36e5) % 24, m = Math.floor(ms / 6e4) % 60, s = Math.floor(ms / 1e3) % 60;
+    t.textContent = (d ? d + 'd ' : '') + String(h).padStart(2, '0') + 'h ' + String(m).padStart(2, '0') + 'm ' + String(s).padStart(2, '0') + 's';
+  };
+  const iv = setInterval(tick, 1000); tick();
+})();
 </script>
 </body>
 </html>
