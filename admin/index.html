@@ -79,6 +79,7 @@ td.r,th.r{text-align:right}
 .t-starter{color:#3b82f6}.t-pro{color:#1d4ed8}.t-studio{color:#fff;background:#1e3a8a}.t-owner{color:var(--mut);background:#f1f5f9}
 .mb{height:6px;background:var(--soft);border-radius:3px;min-width:110px;position:relative;overflow:hidden}
 .mb i{position:absolute;inset:0 auto 0 0;background:var(--cy);border-radius:3px;transition:width 1s}
+.ml{font-size:12px;color:var(--mut);margin-top:3px;white-space:nowrap}
 .mb i.hot{background:#1e3a8a}
 .chart svg{width:100%;height:auto;display:block}
 .chart text{font-family:Inter,sans-serif;fill:var(--mut);font-size:12px}
@@ -218,8 +219,8 @@ td.r,th.r{text-align:right}
     </div>
 
     <div class="p c7">
-      <h2>Minutes used this month<i></i><em id="u-sum"></em></h2>
-      <div class="scroll"><table><thead><tr><th>Account</th><th>Plan</th><th>Minutes used</th><th class="r">Used</th><th class="r">Shorts</th></tr></thead><tbody id="usage"></tbody></table></div>
+      <h2>Usage this month<i></i><em id="u-sum"></em></h2>
+      <div class="scroll"><table><thead><tr><th>Account</th><th>Plan</th><th>Live watching</th><th>Live clips</th><th class="r">Upload min</th></tr></thead><tbody id="usage"></tbody></table></div>
     </div>
 
     <div class="p c12">
@@ -405,12 +406,16 @@ function render(d) {
 
   // usage
   const u = lic?.usage || [];
-  const totMin = u.reduce((a, x) => a + x.minutes, 0);
-  $('u-sum').textContent = totMin.toLocaleString() + ' min total';
-  $('usage').innerHTML = u.length ? u.map(x => { const p = x.cap ? x.minutes / x.cap : 0;
+  const hrs = m => (m / 60).toLocaleString('en-US', { maximumFractionDigits: 1 });
+  const totLive = u.reduce((a, x) => a + (x.live_minutes || 0), 0), totClips = u.reduce((a, x) => a + (x.live_clips || 0), 0), totMin = u.reduce((a, x) => a + x.minutes, 0);
+  $('u-sum').textContent = `${hrs(totLive)} h live · ${totClips.toLocaleString()} clips · ${totMin.toLocaleString()} upload min`;
+  const meter = (v, cap, text, owner) => { const p = !owner && cap ? v / cap : 0;
+    return `<div class="mb"><i data-w="${Math.min(100, p * 100)}%" class="${p > .85 ? 'hot' : ''}" style="width:0"></i></div><div class="ml">${text}</div>`; };
+  $('usage').innerHTML = u.length ? u.map(x => { const own = x.plan === 'owner', lm = x.live_minutes || 0, lc = x.live_clips || 0;
     return `<tr><td>${esc(x.email || '—')}</td><td><span class="tag t-${esc(x.plan)}">${esc(x.plan)}</span></td>
-      <td><div class="mb"><i data-w="${Math.min(100, p * 100)}%" class="${p > .85 ? 'hot' : ''}" style="width:0"></i></div></td>
-      <td class="r">${x.minutes.toLocaleString()}${x.plan === 'owner' ? '' : ' / ' + x.cap.toLocaleString()}</td><td class="r">${x.shorts}</td></tr>`; }).join('')
+      <td>${meter(lm, x.live_cap, hrs(lm) + (own ? '' : ' / ' + hrs(x.live_cap || 0)) + ' h', own)}</td>
+      <td>${meter(lc, x.clips_cap, lc.toLocaleString() + (own ? '' : ' / ' + (x.clips_cap || 0).toLocaleString()), own)}</td>
+      <td class="r">${x.minutes.toLocaleString()}${own ? '' : ' / ' + x.cap.toLocaleString()}</td></tr>`; }).join('')
     : '<tr><td colspan="5" style="color:var(--mut)">No usage yet this month.</td></tr>';
 
   // payments
