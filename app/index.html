@@ -88,6 +88,7 @@ const CFG = {
   supabase: "https://tsgqmbjmgwpjxcyrbmds.supabase.co",
   key: "sb_publishable_ZU-yY6eHL5lPpO8CoTiu8Q_HQRg4wdS",
   gate: "https://kiermedia2025--viceai-online-appgw.us-east.modal.run",   // each customer's own Vice.ai app (online/modal_app.py appgw)
+  backup: "https://viceai-backup.fly.dev",   // backup server when the main one is paused (online/fly/backup_gate.py)
 };
 const $ = id => document.getElementById(id);
 const say = (el, t, k) => { $(el).textContent = t || ''; $(el).className = 'msg' + (k ? ' ' + k : ''); };
@@ -126,15 +127,29 @@ async function launch() {
     const d = await r.json().catch(() => ({}));
     if (r.status === 401) { keep(null); clearInterval(tick); return show(); }
     if (r.status === 402) { clearInterval(tick); $('lt').textContent = 'Choose a plan to start'; $('ls').innerHTML = 'Your account doesn\'t have a plan yet. <a href="/#pricing">See plans</a>'; return; }
-    if (r.status === 404 || r.status === 429 || r.status >= 500) return paused();  // servers paused or over capacity (e.g. the Modal usage limit)
+    if (r.status === 404 || r.status === 429 || r.status >= 500) return backup(t);  // main servers paused or over capacity (e.g. the Modal usage limit)
     if (!r.ok || !d.url) throw new Error(d.detail || 'Vice.ai didn\'t start.');
     $('lb').style.width = '100%'; location.href = CFG.gate + d.url;
   } catch (e) {
     clearInterval(tick);
     if (navigator.onLine === false) { say('lm', 'You\'re offline. Check your connection, then try again.', 'err'); $('lx').hidden = false; return; }
-    if ((e.message || '').includes('fetch') || e instanceof TypeError) return paused();  // the server didn't answer at all
+    if ((e.message || '').includes('fetch') || e instanceof TypeError) return backup(t);  // the main server didn't answer at all
     say('lm', e.message, 'err'); $('lx').hidden = false;
   }
+}
+// Backup server (Fly.io): when the main servers (Modal) are paused, open the customer's Vice.ai there instead.
+async function backup(t) {
+  if (!CFG.backup) return paused();
+  $('lt').textContent = 'Switching to the backup server…';
+  $('ls').textContent = 'Our main servers are busy, so Vice.ai is opening on the backup. This can take up to a minute.';
+  let w = 20; clearInterval(tick); tick = setInterval(() => { w = Math.min(95, w + (95 - w) * 0.05); $('lb').style.width = w + '%'; }, 500);
+  try {
+    const r = await fetch(CFG.backup + '/session', { method: 'POST', headers: { Authorization: 'Bearer ' + t } });
+    const d = await r.json().catch(() => ({}));
+    if (r.status === 402) { clearInterval(tick); $('lt').textContent = 'Choose a plan to start'; $('ls').innerHTML = 'Your account doesn\'t have a plan yet. <a href="/#pricing">See plans</a>'; return; }
+    if (!r.ok || !d.url) return paused();
+    $('lb').style.width = '100%'; location.href = CFG.backup + d.url;
+  } catch (e) { paused(); }
 }
 // Backup screen: when Vice.ai's servers are paused (busy, or the monthly server limit was reached) customers see a calm
 // message instead of an error, and the page keeps retrying by itself every minute.
