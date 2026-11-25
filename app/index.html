@@ -118,6 +118,7 @@ $('lr').onclick = () => launch();
 let tick = null;
 async function launch() {
   $('lx').hidden = true; say('lm', ''); $('lt').textContent = 'Opening your Vice.ai…';
+  $('ls').textContent = 'Starting your own copy of the app. This takes a few seconds the first time.';
   let w = 8; clearInterval(tick); tick = setInterval(() => { w = Math.min(92, w + (92 - w) * 0.06); $('lb').style.width = w + '%'; }, 400);
   const t = await token(); if (!t) { clearInterval(tick); return show(); }
   try {
@@ -125,11 +126,26 @@ async function launch() {
     const d = await r.json().catch(() => ({}));
     if (r.status === 401) { keep(null); clearInterval(tick); return show(); }
     if (r.status === 402) { clearInterval(tick); $('lt').textContent = 'Choose a plan to start'; $('ls').innerHTML = 'Your account doesn\'t have a plan yet. <a href="/#pricing">See plans</a>'; return; }
+    if (r.status === 404 || r.status === 429 || r.status >= 500) return paused();  // servers paused or over capacity (e.g. the Modal usage limit)
     if (!r.ok || !d.url) throw new Error(d.detail || 'Vice.ai didn\'t start.');
     $('lb').style.width = '100%'; location.href = CFG.gate + d.url;
   } catch (e) {
-    clearInterval(tick); say('lm', (e.message || '').includes('fetch') ? 'Couldn\'t reach Vice.ai. Check your connection.' : e.message, 'err'); $('lx').hidden = false;
+    clearInterval(tick);
+    if (navigator.onLine === false) { say('lm', 'You\'re offline. Check your connection, then try again.', 'err'); $('lx').hidden = false; return; }
+    if ((e.message || '').includes('fetch') || e instanceof TypeError) return paused();  // the server didn't answer at all
+    say('lm', e.message, 'err'); $('lx').hidden = false;
   }
+}
+// Backup screen: when Vice.ai's servers are paused (busy, or the monthly server limit was reached) customers see a calm
+// message instead of an error, and the page keeps retrying by itself every minute.
+let retry = null;
+function paused() {
+  clearInterval(tick); clearInterval(retry); $('lb').style.width = '100%';
+  $('lt').textContent = 'Vice.ai is taking a short break';
+  let n = 60;
+  const draw = () => { $('ls').innerHTML = 'Our servers are very busy right now. Your plan, your streamers and your Shorts are safe. Trying again in <b>' + n + 's</b>…'; };
+  draw(); say('lm', '');
+  retry = setInterval(() => { n--; if (n > 0) return draw(); clearInterval(retry); launch(); }, 1000);
 }
 function show() {
   const inn = !!S; $('gate').hidden = inn; $('app').hidden = !inn; $('out').hidden = !inn;
